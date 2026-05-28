@@ -679,57 +679,92 @@ section { position: relative; }
   align-items: start;
 }
 
-/* Grille de cartes logos clients (chaque carte peut recevoir un <img>) */
-.collab-list {
-  list-style: none;
-  margin: 14px 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+/* MARQUEE LOGOS CLIENTS — bulles rondes blanches qui défilent.
+   Desktop : auto-scroll infini (pause au survol).
+   Mobile  : touch-scroll horizontal avec snap.            */
+.collab-marquee {
+  position: relative;
+  margin-top: 18px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.collab-card {
+.collab-track {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  width: max-content;
+  animation: collabFlow 40s linear infinite;
+}
+.collab-marquee:hover .collab-track { animation-play-state: paused; }
+@keyframes collabFlow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.collab-bubble {
+  flex: 0 0 auto;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: #fff;
   display: grid;
   place-items: center;
-  height: 92px;
-  padding: 14px 18px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
-  overflow: hidden;
+  padding: 16px;
+  box-shadow:
+    0 12px 28px -8px rgba(0, 0, 0, 0.45),
+    0 0 0 2px rgba(255, 255, 255, 0.06);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
-.collab-card:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(244, 111, 240, 0.4);
-  transform: translateY(-3px);
+.collab-bubble:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 18px 34px -8px rgba(123, 47, 240, 0.45),
+    0 0 0 2px rgba(34, 211, 206, 0.35);
 }
-/* Logo image : limité en hauteur, garde ses proportions, affichage neutre */
-.collab-card-logo {
+.collab-bubble img {
   max-width: 100%;
-  max-height: 48px;
+  max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
-  opacity: 0.92;
-  transition: opacity 0.25s var(--ease);
-}
-.collab-card:hover .collab-card-logo { opacity: 1; }
-/* Optionnel : ajoute la classe `collab-list--mono` sur <ul> pour forcer tous les logos en blanc */
-.collab-list--mono .collab-card-logo { filter: brightness(0) invert(1); }
-/* Nom du client (affiché tant qu'il n'y a pas de logo image) */
-.collab-card-name {
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.25;
+  border-radius: 50%;
 }
 
-@media (max-width: 820px) {
+/* Mobile : on coupe le marquee, l'utilisateur swipe les bulles uniques (pas de doublons) */
+@media (max-width: 720px) {
   .stats-collab-body { grid-template-columns: 1fr; gap: 44px; }
-  .collab-list { grid-template-columns: repeat(2, 1fr); }
+  /* Le bloc clients reste centré horizontalement */
+  .collab { text-align: center; width: 100%; }
+  .collab-title { text-align: center; display: block; width: 100%; margin: 0 auto 18px; }
+  .collab-marquee {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .collab-marquee::-webkit-scrollbar { display: none; }
+  .collab-track {
+    animation: none;
+    width: max-content;
+    gap: 16px;
+    padding-block: 4px;
+    margin: 0;
+  }
+  .collab-bubble {
+    scroll-snap-align: center;
+    width: 84px; height: 84px;
+    padding: 14px;
+  }
+  /* Les duplicates seraient redondants en swipe → masqués */
+  .collab-bubble--dup { display: none; }
 }
 .stats { display: flex; flex-direction: column; gap: 24px; }
 .stat {
@@ -2352,9 +2387,10 @@ section { position: relative; }
     gap: 80px;
   }
   .h-active .stats-collab .stats { min-width: 280px; }
-  .h-active .stats-collab .collab { min-width: 340px; }
-  .h-active .stats-collab .collab-list { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .h-active .stats-collab .collab-card { height: 78px; padding: 10px 14px; }
+  .h-active .stats-collab .collab { min-width: 360px; max-width: 420px; }
+  /* Le marquee a une largeur définie pour boucler proprement dans le coverflow */
+  .h-active .stats-collab .collab-marquee { width: 100%; }
+  .h-active .stats-collab .collab-bubble { width: 86px; height: 86px; padding: 14px; }
 
   /* — GALERIE → frise horizontale — */
   .h-active .gallery-section.panel { min-width: auto; padding-inline: clamp(32px, 4vw, 80px); }
