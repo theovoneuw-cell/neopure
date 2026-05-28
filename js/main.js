@@ -23,9 +23,10 @@
     btn.addEventListener("click", function () {
       setMenu(!overlay.classList.contains("is-open"));
     });
-    // Fermeture au clic sur un lien
+    // Fermeture au clic sur un lien OU sur le fond du menu (en dehors des items)
     overlay.addEventListener("click", function (e) {
-      if (e.target.closest("a")) setMenu(false);
+      if (e.target.closest("a")) { setMenu(false); return; }
+      if (e.target === overlay) setMenu(false);
     });
     // Fermeture à la touche Échap
     document.addEventListener("keydown", function (e) {
