@@ -987,11 +987,12 @@ section { position: relative; }
 .stat-num {
   font-family: var(--font-head);
   font-weight: 800;
-  font-size: clamp(3rem, 7vw, 4.6rem);
+  font-size: clamp(2.8rem, 6.5vw, 4.4rem);
   line-height: 1;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;       /* chiffres à largeur fixe → pas de tremblement */
+  letter-spacing: -0.02em;                  /* moins serré que -0.04em : le % a la place de respirer */
+  font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+  padding-right: 6px;                       /* garde-fou anti-coupure du dernier glyphe */
 }
 .stat-bar {
   display: block;
@@ -1267,13 +1268,13 @@ section { position: relative; }
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Hover : la carte se soulève, l'aura s'intensifie, l'accent s'étire */
+/* Hover : aura intensifiée + accent étiré, MAIS pas de soulèvement (évite
+   l'effet d'agrandissement parasite quand la souris passe sur les items) */
 .sector:hover {
-  transform: translateY(-10px);
   background:
-    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 65%),
-    rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.18);
+    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0) 65%),
+    rgba(255, 255, 255, 0.055);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 .sector--com:hover {
   box-shadow:
