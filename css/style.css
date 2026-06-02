@@ -781,26 +781,26 @@ section { position: relative; }
 /* Évite que le marquee max-content explose la largeur de la colonne */
 .stats, .collab { min-width: 0; }
 
-/* MUR DE STICKERS CLIENTS — bulles tiltées, lévitation indépendante, shimmer au survol.
-   Desktop : marquee infini (pause au survol).
+/* MUR DE CLIENTS — cartes verre arrondies, logo entier visible, défilé continu.
+   Desktop : marquee infini fluide (pause au survol).
    Mobile  : swipe horizontal avec snap. */
 .collab-marquee {
   position: relative;
-  margin-top: 22px;
-  padding: 26px 0;
+  margin-top: 24px;
+  padding: 18px 0;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 .collab-track {
   display: flex;
   align-items: center;
-  gap: 26px;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
   width: max-content;
-  animation: collabFlow 48s linear infinite;
+  animation: collabFlow 46s linear infinite;
 }
 .collab-marquee:hover .collab-track { animation-play-state: paused; }
 @keyframes collabFlow {
@@ -808,70 +808,62 @@ section { position: relative; }
   to   { transform: translateX(-50%); }
 }
 
-.collab-bubble {
-  flex: 0 0 94px;
-  width: 94px;
-  height: 94px;
-  min-width: 94px;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
+/* Tuile carrée façon feed Instagram : visuel client plein cadre, coins arrondis,
+   taille uniforme. La source étant carrée, cover remplit sans couper ni laisser
+   de blanc. Posée sur le fond sombre avec une fine bordure et un halo de marque. */
+.collab-card {
+  flex: 0 0 auto;
+  width: 132px;
+  height: 132px;
+  border-radius: 18px;
+  overflow: hidden;
   position: relative;
-  background: #fff;
-  overflow: hidden;                  /* clip le carré du logo en rond */
-  padding: 0;                        /* le logo remplit toute la bulle */
   box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    0 16px 34px -10px rgba(188, 107, 242, 0.42),
-    0 4px 10px rgba(0, 0, 0, 0.32),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
-  animation: collabBob 6s ease-in-out infinite alternate;
-  --tilt: 0deg;
-  transform: rotate(var(--tilt));
+    0 18px 38px -18px rgba(188, 107, 242, 0.5),
+    0 6px 14px -8px rgba(0, 0, 0, 0.45);
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease);
 }
-@keyframes collabBob {
-  from { translate: 0 -7px; }
-  to   { translate: 0 7px; }
-}
-/* Tilts variés + tempo de lévitation décalé pour un rendu organique */
-.collab-bubble:nth-child(8n+1) { --tilt: -5deg; animation-duration: 5.4s; }
-.collab-bubble:nth-child(8n+2) { --tilt:  3deg; animation-duration: 6.2s; animation-delay: -1s; }
-.collab-bubble:nth-child(8n+3) { --tilt: -2deg; animation-duration: 5.8s; animation-delay: -2s; }
-.collab-bubble:nth-child(8n+4) { --tilt:  6deg; animation-duration: 6.6s; animation-delay: -0.5s; }
-.collab-bubble:nth-child(8n+5) { --tilt: -7deg; animation-duration: 5.2s; animation-delay: -1.5s; }
-.collab-bubble:nth-child(8n+6) { --tilt:  2deg; animation-duration: 6.8s; animation-delay: -3s; }
-.collab-bubble:nth-child(8n+7) { --tilt: -3deg; animation-duration: 5.6s; animation-delay: -0.8s; }
-.collab-bubble:nth-child(8n)   { --tilt:  4deg; animation-duration: 6.4s; animation-delay: -2.4s; }
-
-.collab-bubble:hover {
-  transform: rotate(0) scale(1.12);
-  box-shadow:
-    0 28px 52px -12px rgba(188, 107, 242, 0.65),
-    0 0 0 3px rgba(53, 242, 242, 0.55),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
-  animation-play-state: paused;
-  z-index: 2;
-}
-
-/* Logo : remplit toute la bulle, ses bords carrés sont clippés par overflow:hidden */
-.collab-bubble img {
+.collab-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: cover;                 /* tuile carrée + image carrée = remplissage parfait */
   display: block;
-  position: relative;
-  z-index: 1;
 }
+/* Liseré dégradé de marque qui s'allume au survol (overlay en bordure interne) */
+.collab-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(145deg, var(--np-cyan), var(--np-violet));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+}
+.collab-card:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow:
+    0 28px 56px -18px rgba(188, 107, 242, 0.75),
+    0 8px 18px -8px rgba(0, 0, 0, 0.5);
+}
+.collab-card:hover::after { opacity: 1; }
 
 /* Tablette : on empile dès qu'on perd la place pour 2 colonnes lisibles */
 @media (max-width: 980px) {
   .stats-collab-body { grid-template-columns: minmax(0, 1fr); gap: 44px; }
 }
 
-/* Mobile : on coupe le marquee, l'utilisateur swipe les bulles uniques (pas de doublons) */
+/* Mobile : swipe horizontal avec snap (pas de doublons) */
 @media (max-width: 720px) {
-  /* Le bloc clients reste centré horizontalement */
   .collab { text-align: center; width: 100%; }
   .collab-title { text-align: center; display: block; width: 100%; margin: 0 auto 18px; }
   .collab-marquee {
@@ -881,28 +873,23 @@ section { position: relative; }
     scrollbar-width: none;
     -ms-overflow-style: none;
     width: 100%;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   }
   .collab-marquee::-webkit-scrollbar { display: none; }
   .collab-track {
     animation: none;
     width: max-content;
-    gap: 16px;
+    gap: 14px;
     padding-block: 4px;
     margin: 0;
   }
-  .collab-bubble {
+  .collab-card {
     scroll-snap-align: center;
-    flex: 0 0 84px;
-    width: 84px;
-    height: 84px;
-    min-width: 84px;
-    aspect-ratio: 1 / 1;
-    padding: 0;
+    width: 124px;
+    height: 124px;
   }
-  /* Les duplicates seraient redondants en swipe → masqués */
-  .collab-bubble--dup { display: none; }
+  .collab-card--dup { display: none; }
 }
 .stats { display: flex; flex-direction: column; gap: 24px; }
 .stat {
@@ -1008,36 +995,6 @@ section { position: relative; }
 .stat-label em { display: block; font-style: normal; font-weight: 400; color: var(--np-muted); font-size: 0.92rem; }
 
 .collab-title { margin-bottom: 18px; text-align: center; }
-.collab-marquee {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-.collab-track {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: max-content;
-  animation: marquee 26s linear infinite;
-}
-.collab-marquee:hover .collab-track { animation-play-state: paused; }
-.collab-logo {
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  height: 72px;
-  padding: 0 22px;
-  border-radius: var(--r-md);
-  background: #f6f5fb;
-  border: 1px solid var(--np-line);
-  font-family: var(--font-head);
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--np-muted);
-  white-space: nowrap;
-  transition: color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
-}
-.collab-logo:hover { color: var(--np-purple); border-color: var(--np-purple); transform: translateY(-3px); }
 
 /* 7b. GALERIE -------------------------------------------------------------- */
 .gallery-section { padding: 40px 0 90px; background: var(--np-white); }
@@ -2547,7 +2504,6 @@ section { position: relative; }
   .h-active .stats-collab .collab { min-width: 360px; max-width: 420px; }
   /* Le marquee a une largeur définie pour boucler proprement dans le coverflow */
   .h-active .stats-collab .collab-marquee { width: 100%; }
-  .h-active .stats-collab .collab-bubble { width: 86px; height: 86px; padding: 0; }
 
   /* — GALERIE → frise horizontale — */
   .h-active .gallery-section.panel { min-width: auto; padding-inline: clamp(32px, 4vw, 80px); }
@@ -2720,14 +2676,6 @@ body { background: #151626; color: var(--np-white); }
 .team-content p { color: rgba(255, 255, 255, 0.68); }
 .team-content p strong { color: #fff; }
 
-/* Logos collaborations → verre sombre */
-.collab-logo {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.7);
-}
-.collab-logo:hover { color: #fff; border-color: var(--np-pink); }
-
 /* Formulaire → champs en verre sombre */
 .field label { color: rgba(255, 255, 255, 0.9); }
 .field input, .field textarea {
@@ -2867,9 +2815,6 @@ body { background: #151626; color: var(--np-white); }
   .stat { padding: 22px 22px 20px; border-radius: 18px; }
   .stat-num { font-size: clamp(2.4rem, 11vw, 3.6rem); }
   .stat::before { font-size: clamp(6rem, 22vw, 8rem); }
-  .collab-list { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .collab-card { height: 76px; padding: 12px; }
-  .collab-card-name { font-size: 0.88rem; }
 
   /* SERVICES ------------------------------------------------------------ */
   .services-lead { font-size: clamp(1.05rem, 4.5vw, 1.4rem); }
