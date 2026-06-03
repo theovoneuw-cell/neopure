@@ -38,8 +38,8 @@
       var r = p.getBoundingClientRect();
       var dist = (r.left + r.width / 2 - cx) / window.innerWidth;
       var k = Math.max(-1, Math.min(1, dist));
-      var rot = (-k * 12).toFixed(2);
-      var tz = (-Math.abs(k) * 110).toFixed(0);
+      var rot = (-k * 6).toFixed(2);               // rotation Y plus douce (±6°)
+      var tz = (-Math.abs(k) * 55).toFixed(0);     // recul réduit → moins de chevauchement
       p.style.transform = "rotateY(" + rot + "deg) translateZ(" + tz + "px)";
     }
   }

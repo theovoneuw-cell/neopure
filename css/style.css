@@ -2528,7 +2528,7 @@ section { position: relative; }
     position: relative;
     will-change: transform;
     transform-style: preserve-3d;
-    gap: 56px;                       /* respiration horizontale entre tous les panneaux */
+    gap: 130px;                      /* large espace : évite tout chevauchement entre panneaux en 3D */
     pointer-events: none;            /* Firefox : le track 3D ne doit pas voler les clics destinés aux panneaux */
   }
   .h-active .h-track > main { display: contents; }
