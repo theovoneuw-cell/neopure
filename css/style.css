@@ -830,10 +830,9 @@ section { position: relative; }
   box-shadow:
     0 10px 24px -12px rgba(188, 107, 242, 0.55),
     0 4px 10px -6px rgba(0, 0, 0, 0.45);
-  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+  transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  will-change: transform;
 }
 .collab-card img {
   width: 100%;
@@ -858,11 +857,12 @@ section { position: relative; }
   transition: opacity 0.4s var(--ease);
   pointer-events: none;
 }
+/* Survol : pas de déplacement (évite toute déformation dans le contexte 3D
+   du coverflow) — seul le liseré dégradé + le halo s'intensifient. */
 .collab-card:hover {
-  transform: translateY(-5px);
   border-color: transparent;
   box-shadow:
-    0 16px 32px -14px rgba(188, 107, 242, 0.7),
+    0 14px 30px -14px rgba(188, 107, 242, 0.75),
     0 6px 14px -8px rgba(0, 0, 0, 0.5);
 }
 .collab-card:hover::after { opacity: 1; }
