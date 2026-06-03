@@ -2980,3 +2980,129 @@ body { background: #151626; color: var(--np-white); }
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ==========================================================================
+   15. LIGHTBOX — visionneuse galerie plein écran
+   ========================================================================== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 56px);
+  background: rgba(10, 9, 22, 0.78);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease);
+}
+.lightbox.is-open { opacity: 1; visibility: visible; }
+
+.lb-stage {
+  position: relative;
+  max-width: min(92vw, 1100px);
+  max-height: 86vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.92);
+  opacity: 0;
+  transition: transform 0.45s var(--ease), opacity 0.45s var(--ease);
+}
+.lightbox.is-open .lb-stage { transform: scale(1); opacity: 1; }
+
+/* Média affiché : image ou vidéo, contenu, coins arrondis, halo de marque */
+.lb-stage img,
+.lb-stage video {
+  display: block;
+  max-width: 92vw;
+  max-height: 86vh;
+  width: auto;
+  height: auto;
+  border-radius: 16px;
+  box-shadow:
+    0 40px 100px -30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 60px -10px rgba(188, 107, 242, 0.5);
+  background: #000;
+}
+
+/* Bouton fermer */
+.lb-close {
+  position: absolute;
+  top: clamp(14px, 3vw, 28px);
+  right: clamp(14px, 3vw, 32px);
+  z-index: 2;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.lb-close:hover { background: rgba(255, 255, 255, 0.16); transform: rotate(90deg); border-color: var(--np-cyan); }
+
+/* Flèches navigation */
+.lb-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.lb-prev { left: clamp(10px, 3vw, 28px); }
+.lb-next { right: clamp(10px, 3vw, 28px); }
+.lb-prev:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--np-cyan); transform: translateY(-50%) scale(1.08); }
+.lb-next:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--np-cyan); transform: translateY(-50%) scale(1.08); }
+
+/* Compteur (n / total) */
+.lb-counter {
+  position: absolute;
+  bottom: clamp(14px, 3vw, 28px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+/* La galerie devient cliquable (curseur main) */
+.gallery-item { cursor: pointer; }
+
+/* Mobile : flèches plus petites et collées aux bords */
+@media (max-width: 720px) {
+  .lb-nav { width: 44px; height: 44px; font-size: 1.6rem; }
+  .lb-close { width: 46px; height: 46px; font-size: 1.6rem; }
+  .lb-stage img, .lb-stage video { max-height: 78vh; border-radius: 12px; }
+}
+
+/* Respect du reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .lb-stage { transition: opacity 0.2s linear; transform: none; }
+  .lightbox.is-open .lb-stage { transform: none; }
+  .lb-close:hover { transform: none; }
+}

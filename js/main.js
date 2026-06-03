@@ -139,4 +139,87 @@
       form.replaceWith(ok);
     });
   }
+
+  /* 8. Lightbox galerie : clic sur une photo/vidéo → plein écran + navigation -- */
+  (function () {
+    var lb = document.getElementById("lightbox");
+    var stage = document.getElementById("lbStage");
+    var counter = document.getElementById("lbCounter");
+    var btnClose = document.getElementById("lbClose");
+    var btnPrev = document.getElementById("lbPrev");
+    var btnNext = document.getElementById("lbNext");
+    var items = Array.prototype.slice.call(document.querySelectorAll(".gallery-item"));
+    if (!lb || !stage || !items.length) return;
+
+    // Construit la liste des médias (type + source) à partir de la galerie
+    var media = items.map(function (fig) {
+      var v = fig.querySelector("video");
+      if (v) return { type: "video", src: v.currentSrc || v.getAttribute("src"), poster: v.getAttribute("poster") || "" };
+      var img = fig.querySelector("img");
+      return { type: "image", src: img ? img.getAttribute("src") : "", alt: img ? img.getAttribute("alt") : "" };
+    });
+
+    var current = -1;
+
+    function render(i) {
+      var m = media[i];
+      if (!m) return;
+      stage.innerHTML = "";
+      var el;
+      if (m.type === "video") {
+        el = document.createElement("video");
+        el.src = m.src;
+        if (m.poster) el.poster = m.poster;
+        el.controls = true;
+        el.autoplay = true;
+        el.loop = true;
+        el.playsInline = true;
+        el.setAttribute("playsinline", "");
+      } else {
+        el = document.createElement("img");
+        el.src = m.src;
+        el.alt = m.alt || "Réalisation Neopure";
+      }
+      stage.appendChild(el);
+      if (counter) counter.textContent = (i + 1) + " / " + media.length;
+    }
+
+    function open(i) {
+      current = i;
+      render(i);
+      lb.classList.add("is-open");
+      lb.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      lb.classList.remove("is-open");
+      lb.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      // stoppe toute vidéo en cours pour libérer le son
+      setTimeout(function () { stage.innerHTML = ""; }, 400);
+      current = -1;
+    }
+    function go(dir) {
+      if (current < 0) return;
+      current = (current + dir + media.length) % media.length;
+      render(current);
+    }
+
+    items.forEach(function (fig, i) {
+      fig.addEventListener("click", function () { open(i); });
+    });
+    btnClose.addEventListener("click", close);
+    btnPrev.addEventListener("click", function () { go(-1); });
+    btnNext.addEventListener("click", function () { go(1); });
+    // Clic sur le fond (hors média/boutons) → ferme
+    lb.addEventListener("click", function (e) {
+      if (e.target === lb || e.target === stage) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (!lb.classList.contains("is-open")) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowLeft") go(-1);
+      else if (e.key === "ArrowRight") go(1);
+    });
+  })();
 })();
