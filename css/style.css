@@ -764,7 +764,6 @@ section { position: relative; }
   pointer-events: none;
   background: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
   opacity: 0.05;
-  will-change: transform;
 }
 .n-float--a {
   width: clamp(180px, 22vw, 320px); aspect-ratio: 1 / 1;
@@ -2533,17 +2532,19 @@ section { position: relative; }
 .radar-ping {
   position: absolute;
   left: 50%; top: 50%;
-  width: 16px; height: 16px;
+  width: 220px; height: 220px;
+  margin: -110px 0 0 -110px;        /* centrage sans transform → scale propre */
   border-radius: 50%;
   border: 2px solid var(--np-cyan);
-  transform: translate(-50%, -50%);
   z-index: 4;
+  transform: scale(0.07);
   animation: ping 3.4s cubic-bezier(0, 0.4, 0.3, 1) infinite;
 }
 .radar-ping--2 { animation-delay: 1.7s; }
+/* Animation GPU pure (transform + opacity), plus de width/height = plus de layout */
 @keyframes ping {
-  0%   { width: 16px; height: 16px; opacity: 0.9; }
-  100% { width: 150%; height: 150%; opacity: 0; }
+  0%   { transform: scale(0.07); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0; }
 }
 .map-caption { max-width: 460px; }
 .map-caption h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 6px 0 16px; }
@@ -2860,6 +2861,16 @@ body { background: #151626; color: var(--np-white); }
 /* ==========================================================================
    14. MOBILE TUNING — finitions pour passer impeccable en < 1025 px
    ========================================================================== */
+
+/* ===== PERF MOBILE : fluidité du scroll sur smartphone =====
+   On coupe les animations de fond qui repeignent tout l'écran à chaque frame
+   (drift des dégradés, grain). Les dégradés restent — juste statiques. */
+@media (max-width: 1024px) {
+  .world-bg { animation: none; }
+  .hero-bg  { animation: none; }
+  .grain    { display: none; }          /* overlay fixe 4× écran : trop coûteux sur mobile */
+  .n-float  { animation: none; }        /* N en filigrane statique (toujours visibles) */
+}
 
 /* Garde anti-débordement horizontal pour TOUT le site en mobile */
 @media (max-width: 1024px) {
