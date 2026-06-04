@@ -1716,6 +1716,18 @@ section { position: relative; }
   padding: 20px 0;
 }
 .footer-bottom p { margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); }
+.footer-credit { margin-top: 7px !important; font-size: 0.82rem; color: rgba(255, 255, 255, 0.55) !important; }
+.footer-credit a {
+  color: var(--np-cyan);
+  font-weight: 600;
+  text-decoration: none;
+  background: linear-gradient(90deg, var(--np-cyan), var(--np-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: opacity 0.2s var(--ease);
+}
+.footer-credit a:hover { opacity: 0.75; }
 
 /* 8. RESPONSIVE ============================================================ */
 @media (max-width: 980px) {
@@ -2984,7 +2996,9 @@ body { background: #151626; color: var(--np-white); }
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal { opacity: 1; transform: none; }
+  /* Le reveal au scroll reste actif (fondu + léger glissé) : animation ponctuelle,
+     douce et peu coûteuse — demandée explicitement, y compris sur iPhone. */
+  .reveal { transition-duration: 0.7s !important; }
 }
 
 /* ==========================================================================

@@ -77,7 +77,8 @@
 
   /* 3. Reveal au scroll (IntersectionObserver) ----------------------------- */
   var revealEls = document.querySelectorAll(".reveal");
-  if (reduced || !("IntersectionObserver" in window)) {
+  // Le reveal au scroll joue même en "réduire les animations" (fondu ponctuel léger).
+  if (!("IntersectionObserver" in window)) {
     revealEls.forEach(function (el) { el.classList.add("is-visible"); });
   } else {
     var io = new IntersectionObserver(function (entries) {
@@ -87,7 +88,7 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    }, { threshold: 0, rootMargin: "0px 0px -10% 0px" });
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
