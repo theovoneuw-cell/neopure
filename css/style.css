@@ -756,6 +756,50 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* 7. SECTIONS GÉNÉRIQUES =================================================== */
 section { position: relative; }
 
+/* ===== N flottants : rappels de marque discrets en fond de section ===== */
+.stats-collab, .services, .team, .contact { isolation: isolate; }
+.n-float {
+  position: absolute;
+  z-index: -1;                /* toujours derrière le contenu */
+  pointer-events: none;
+  background: url('../assets/brand/Logo_N_Degrade_SF.png') center / contain no-repeat;
+  opacity: 0.05;
+  will-change: transform;
+}
+.n-float--a {
+  width: clamp(180px, 22vw, 320px); aspect-ratio: 1 / 1;
+  top: 7%; right: -3%;
+  animation: nFloatA 17s ease-in-out infinite alternate;
+}
+.n-float--b {
+  width: clamp(150px, 17vw, 250px); aspect-ratio: 1 / 1;
+  bottom: 6%; left: -2%; opacity: 0.045;
+  animation: nFloatB 21s ease-in-out infinite alternate;
+}
+.n-float--c {
+  width: clamp(160px, 19vw, 280px); aspect-ratio: 1 / 1;
+  top: 12%; left: 4%; opacity: 0.04;
+  animation: nFloatA 19s ease-in-out infinite alternate;
+}
+.n-float--d {
+  width: clamp(170px, 20vw, 300px); aspect-ratio: 1 / 1;
+  bottom: 8%; right: 2%;
+  animation: nFloatB 23s ease-in-out infinite alternate;
+}
+@keyframes nFloatA {
+  from { transform: translateY(0) rotate(8deg); }
+  to   { transform: translateY(-26px) rotate(4deg); }
+}
+@keyframes nFloatB {
+  from { transform: translateY(0) rotate(-10deg); }
+  to   { transform: translateY(22px) rotate(-6deg); }
+}
+@media (max-width: 720px) {
+  /* Mobile : on n'en garde qu'un par section, un peu plus petit, pour rester léger */
+  .n-float { opacity: 0.045; }
+  .n-float--b, .n-float--c { display: none; }
+}
+
 /* 7a. STATS + COLLABORATIONS ---------------------------------------------- */
 .stats-collab { padding: 96px 0; background: var(--np-white); }
 .stats-collab-inner {
