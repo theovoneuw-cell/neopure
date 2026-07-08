@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 
   <!-- ============ SEO de base ============ -->
   <title>Neopure — Agence de communication & événementiel | La Com' & L'Event</title>
@@ -10,7 +11,7 @@
   <meta name="keywords" content="agence de communication, événementiel, community management, social media, photo, vidéo, DJ, team building, séminaire, organisation d'événement, Montpellier" />
   <meta name="author" content="Neopure" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#151626" />
+  <meta name="theme-color" content="#2f173b" />
   <link rel="canonical" href="https://neopure.fr/" />
 
   <!-- ============ Open Graph (Facebook, LinkedIn…) ============ -->
@@ -41,7 +42,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260604h" />
+  <link rel="stylesheet" href="css/style.css?v=20260708j" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -71,55 +72,12 @@
   <!-- ====================== CANVAS CONTINU (un seul "monde") ====================== -->
   <div class="world-bg" aria-hidden="true"></div>
 
-  <!-- ====================== INTRO DE MARQUE (preloader) ====================== -->
-  <div class="preloader" id="preloader" aria-hidden="true">
-    <div class="preloader-inner">
-      <div class="preloader-tag">
-        <span class="preloader-tag-bar" aria-hidden="true"></span>
-        <span>Communication <span class="preloader-tag-x">×</span> Événementiel</span>
-      </div>
-
-      <div class="preloader-logo">
-        <img class="preloader-logo-img" src="assets/brand/LOGO_SF_BLANC.png" alt="Neopure" />
-      </div>
-
-      <div class="preloader-sectors">
-        <div class="preloader-sector preloader-sector--com">
-          <span class="preloader-sector-idx">01</span>
-          <span class="preloader-sector-name">La Com'</span>
-          <span class="preloader-sector-bar"><span></span></span>
-        </div>
-        <div class="preloader-sector preloader-sector--event">
-          <span class="preloader-sector-idx">02</span>
-          <span class="preloader-sector-name">L'Event</span>
-          <span class="preloader-sector-bar"><span></span></span>
-        </div>
-      </div>
-
-      <p class="preloader-status">On chauffe ton algorithme…</p>
-    </div>
-  </div>
-
-  <!-- ====================== CURSEUR SIGNATURE ====================== -->
-  <div class="cursor" id="cursor" aria-hidden="true">
-    <span class="cursor-ring"></span>
-    <span class="cursor-dot"></span>
-    <span class="cursor-label"></span>
-  </div>
-
-  <!-- ====================== GRAIN CINÉMATOGRAPHIQUE ====================== -->
-  <div class="grain" aria-hidden="true"></div>
-
-  <!-- ====================== BARRE DE PROGRESSION (scroll) ====================== -->
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><span></span></div>
-
   <!-- ====================== MARQUE FLOTTANTE + MENU ÉVOLUTIF (pas de barre) ====================== -->
   <a href="#top" class="brand-float" aria-label="Neopure — accueil">
     <img class="brand-float-logo" src="assets/brand/Logo_N_Degrade_SF.png" alt="Neopure" />
   </a>
 
   <button class="menu-btn" id="menuBtn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuOverlay">
-    <span class="menu-ring" aria-hidden="true"></span>
     <span class="menu-ico" aria-hidden="true"><i></i><i></i></span>
   </button>
 
@@ -192,6 +150,12 @@
     <section class="hero panel" aria-label="Présentation">
       <div class="hero-bg" aria-hidden="true"></div>
 
+      <!-- Vidéo de fond du hero, plein cadre (comme sur l'ancien site) : recadrée
+           au centre (le sujet est cadré au centre dans le format story). -->
+      <video class="hero-video" autoplay muted loop playsinline preload="auto">
+        <source src="assets/hero/hero.mp4" type="video/mp4" />
+      </video>
+
       <div class="hero-inner container">
         <header class="hero-top reveal">
           <span class="hero-tag">
@@ -215,7 +179,7 @@
 
         <ul class="hero-sectors reveal" data-delay="2" aria-label="Nos deux secteurs">
           <li class="hero-sector hero-sector--com">
-            <a href="#services" data-cursor="La Com'">
+            <a href="#services">
               <span class="hero-sector-idx">01</span>
               <span class="hero-sector-body">
                 <span class="hero-sector-name">La Com'</span>
@@ -224,7 +188,7 @@
             </a>
           </li>
           <li class="hero-sector hero-sector--event">
-            <a href="#services" data-cursor="L'Event">
+            <a href="#services">
               <span class="hero-sector-idx">02</span>
               <span class="hero-sector-body">
                 <span class="hero-sector-name">L'Event</span>
@@ -235,28 +199,24 @@
         </ul>
 
         <div class="hero-actions reveal" data-delay="3">
-          <a href="#contact" class="btn btn-primary" data-magnetic data-cursor="Go !">
-            Travaillons ensemble <span aria-hidden="true">→</span>
+          <a href="#contact" class="btn btn-primary">
+            Travaillons ensemble
           </a>
-          <a href="#services" class="hero-link" data-cursor="Explore">
+          <a href="#services" class="hero-link">
             Découvre les services
           </a>
 
           <div class="hero-socials">
-            <a class="hero-social" href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" aria-label="Instagram @neopure_com" data-cursor="Suivre">
+            <a class="hero-social" href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" aria-label="Instagram @neopure_com">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
-            <a class="hero-social" href="https://wa.me/33611670705" target="_blank" rel="noopener" aria-label="WhatsApp" data-cursor="WhatsApp">
+            <a class="hero-social" href="https://wa.me/33611670705" target="_blank" rel="noopener" aria-label="WhatsApp">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.82 9.82 0 0 0 1.515 5.26l-.999 3.648 3.973-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413z"/></svg>
             </a>
           </div>
         </div>
       </div>
 
-      <a href="#stats" class="hero-scroll" aria-label="Faire défiler vers le bas">
-        <span class="mouse" aria-hidden="true"></span>
-        Scroll
-      </a>
     </section>
 
     <!-- ====================== STATS + COLLABORATIONS ====================== -->
@@ -312,6 +272,16 @@
                 <li class="collab-card collab-card--dup" aria-hidden="true"><img src="assets/clients/client-08.jpg" alt="" loading="lazy"></li>
               </ul>
             </div>
+
+            <!-- CTA : incite à prendre un rendez-vous rapide (lien Calendly) -->
+            <div class="collab-cta">
+              <!-- TODO: remplacer #contact par le vrai lien Calendly (ex: https://calendly.com/xxx/15min) + target/rel _blank -->
+              <a href="https://calendly.com/neopurecom/30min" target="_blank" rel="noopener" class="btn btn-book" data-calendly>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Prendre un rdv de 15 min
+              </a>
+              <span class="collab-cta-note">On regarde ton projet ensemble, sans engagement.</span>
+            </div>
           </div>
         </div>
 
@@ -322,35 +292,34 @@
     <section class="gallery-section panel" id="realisations" aria-label="Nos réalisations">
       <div class="container">
         <h2 class="gallery-heading reveal">
-          <span class="gradient-text">Des images qui racontent</span>, des vidéos qui engagent :
-          <br /><span class="gallery-heading-strong">stop aux contenus sans fonds.</span>
+          <span class="gradient-text">Des images qui racontent</span>, <span class="nowrap">des vidéos qui engagent.</span>
+          <br /><span class="gallery-heading-strong">Stop aux contenus sans fonds.</span>
         </h2>
+        <p class="gallery-accroche reveal" data-delay="1">Financer du contenu sans stratégie revient à crier dans le désert.</p>
 
         <div class="gallery">
           <!-- Vidéos en petites tuiles aux extrémités (jamais agrandies → restent nettes) -->
-          <figure class="gallery-item is-video g-vid reveal" data-cursor="Reel">
+          <figure class="gallery-item is-video g-vid reveal">
             <video src="assets/gallery/reel-01.mp4" poster="assets/gallery/reel-01-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
-          <figure class="gallery-item is-video g-vid reveal" data-delay="1" data-cursor="Vidéo">
+          <figure class="gallery-item is-video g-vid reveal" data-delay="1">
             <video src="assets/gallery/vid-02.mp4" poster="assets/gallery/g04.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
 
           <!-- Photos haute résolution au centre (portent les accents) -->
-          <figure class="gallery-item reveal" data-delay="1" data-cursor="Voir"><img src="assets/gallery/g01.jpg" alt="Réalisation Neopure — food" loading="lazy"></figure>
-          <figure class="gallery-item g-wide reveal" data-delay="2" data-cursor="Voir"><img src="assets/gallery/g03.jpg" alt="Réalisation Neopure — lifestyle" loading="lazy"></figure>
-          <figure class="gallery-item g-tall reveal" data-cursor="Voir"><img src="assets/gallery/g05.jpg" alt="Réalisation Neopure — table" loading="lazy"></figure>
-          <figure class="gallery-item reveal" data-delay="1" data-cursor="Voir"><img src="assets/gallery/g10.jpg" alt="Réalisation Neopure — cocktail" loading="lazy"></figure>
-          <figure class="gallery-item reveal" data-delay="2" data-cursor="Voir"><img src="assets/gallery/g11.jpg" alt="Réalisation Neopure — apéro" loading="lazy"></figure>
-          <figure class="gallery-item g-wide reveal" data-cursor="Voir"><img src="assets/gallery/g12.jpg" alt="Réalisation Neopure — burger" loading="lazy"></figure>
+          <figure class="gallery-item reveal" data-delay="1"><img src="assets/gallery/g01.jpg" alt="Réalisation Neopure — food" loading="lazy"></figure>
+          <figure class="gallery-item g-wide reveal" data-delay="2"><img src="assets/gallery/g03.jpg" alt="Réalisation Neopure — lifestyle" loading="lazy"></figure>
+          <figure class="gallery-item g-tall reveal"><img src="assets/gallery/g05.jpg" alt="Réalisation Neopure — table" loading="lazy"></figure>
+          <figure class="gallery-item reveal" data-delay="1"><img src="assets/gallery/g10.jpg" alt="Réalisation Neopure — cocktail" loading="lazy"></figure>
 
           <!-- Vidéos en petites tuiles aux extrémités -->
-          <figure class="gallery-item is-video g-vid reveal" data-delay="1" data-cursor="Vidéo">
+          <figure class="gallery-item is-video g-vid reveal" data-delay="1">
             <video src="assets/gallery/vid-01.mp4" poster="assets/gallery/g02.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
-          <figure class="gallery-item is-video g-vid reveal" data-delay="2" data-cursor="Vidéo">
+          <figure class="gallery-item is-video g-vid reveal" data-delay="2">
             <video src="assets/gallery/vid-03.mp4" poster="assets/gallery/g06.jpg" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
@@ -374,12 +343,12 @@
               <p class="sector-tagline">Pour les petits et gros budgets.</p>
             </header>
             <ol class="sector-list">
-              <li>Gestion des réseaux sociaux</li>
-              <li>Création de contenus</li>
-              <li>Développement commercial</li>
-              <li>Stratégie digitale &amp; Ads</li>
-              <li>Optimisation du profil</li>
-              <li>Calendrier de contenus</li>
+              <li data-svc="com-1" role="button" tabindex="0">Gestion des réseaux sociaux</li>
+              <li data-svc="com-2" role="button" tabindex="0">Création de contenus</li>
+              <li data-svc="com-3" role="button" tabindex="0">Développement commercial</li>
+              <li data-svc="com-4" role="button" tabindex="0">Stratégie digitale &amp; Ads</li>
+              <li data-svc="com-5" role="button" tabindex="0">Optimisation du profil</li>
+              <li data-svc="com-6" role="button" tabindex="0">Calendrier de contenus</li>
             </ol>
           </article>
 
@@ -396,21 +365,22 @@
               <p class="sector-tagline">Pour particuliers et professionnels.</p>
             </header>
             <ol class="sector-list">
-              <li>Coordination &amp; logistique</li>
-              <li>DJ &amp; animation</li>
-              <li>Photographe &amp; vidéaste</li>
-              <li>Team building &amp; séminaire</li>
-              <li>Communication évènementielle</li>
-              <li>Stratégie d'acquisition</li>
+              <li data-svc="event-1" role="button" tabindex="0">Coordination &amp; logistique</li>
+              <li data-svc="event-2" role="button" tabindex="0">DJ &amp; animation</li>
+              <li data-svc="event-3" role="button" tabindex="0">Photographe &amp; vidéaste</li>
+              <li data-svc="event-4" role="button" tabindex="0">Team building &amp; séminaire</li>
+              <li data-svc="event-5" role="button" tabindex="0">Communication évènementielle</li>
+              <li data-svc="event-6" role="button" tabindex="0">Stratégie d'acquisition</li>
             </ol>
           </article>
         </div>
 
         <div class="services-cta reveal">
-          <a href="#contact" class="btn btn-primary" data-magnetic data-cursor="On y va !">
-            Travaillons ensemble <span aria-hidden="true">→</span>
+          <a href="#contact" class="btn btn-primary">
+            Travaillons ensemble
           </a>
-          <a href="#realisations" class="hero-link" data-cursor="Explore">Voir nos réalisations</a>
+          <!-- TODO: remplacer #contact par le vrai lien Calendly -->
+          <a href="#contact" class="hero-link" data-calendly>Réserver un appel</a>
         </div>
       </div>
     </section>
@@ -419,7 +389,8 @@
     <section class="team panel" id="equipe" aria-label="L'équipe Neopure">
       <span class="n-float n-float--d" aria-hidden="true"></span>
       <div class="container team-inner">
-        <div class="team-visual reveal" aria-hidden="true">
+        <div class="team-visual reveal">
+          <p class="team-kicker">Les visages derrière vos projets</p>
           <!-- PLACEHOLDER — remplacer par une photo de l'équipe -->
           <div class="team-photo">
             <span>Charlène &amp; Axel</span>
@@ -442,23 +413,21 @@
     <!-- ====================== CONTACT ====================== -->
     <section class="contact panel" id="contact" aria-label="Nous contacter">
       <span class="n-float n-float--c" aria-hidden="true"></span>
-      <!-- ====== BULLES D'ENGAGEMENT (éparpillées) ====== -->
+
+      <!-- ====== BULLES D'ENGAGEMENT (discrètes, dans les marges) ====== -->
       <div class="bubble-field" aria-hidden="true">
         <span class="bubble bubble--pill b-likes" style="--pd:.2s">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.2-9.2-8.2C1 9.9 2.3 6.4 5.6 6.4c1.9 0 3.3 1.2 4.4 2.7 1.1-1.5 2.5-2.7 4.4-2.7 3.3 0 4.6 3.5 2.8 6.4C18.7 16.8 12 21 12 21Z"/></svg>
           <b>2,3K</b>
         </span>
-
         <span class="bubble bubble--pill b-comments" style="--pd:.55s">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           <b>348</b>
         </span>
-
         <span class="bubble bubble--card b-follow" style="--pd:.45s">
           <span class="bubble-avatar"></span>
           <span class="bubble-lines"><em>Nouvel abonné</em><b>@ta_marque</b></span>
         </span>
-
         <span class="bubble bubble--tag b-hashtag" style="--pd:.7s">#TonAlgoTeKiffe</span>
       </div>
 
@@ -521,10 +490,10 @@
           </ul>
 
           <div class="contact-socials">
-            <a href="https://wa.me/33611670705" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp" data-magnetic data-cursor="WhatsApp">
+            <a href="https://wa.me/33611670705" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.82 9.82 0 0 0 1.515 5.26l-.999 3.648 3.973-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413z"/></svg>
             </a>
-            <a href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram" data-magnetic data-cursor="Instagram">
+            <a href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
           </div>
@@ -535,22 +504,20 @@
 
     <!-- ====================== CARTE RADAR ====================== -->
     <section class="map-panel panel" id="localisation" aria-label="Où nous trouver">
-      <!-- ====== BULLES D'ENGAGEMENT (éparpillées) ====== -->
+
+      <!-- ====== BULLES D'ENGAGEMENT (discrètes, dans les marges) ====== -->
       <div class="bubble-field" aria-hidden="true">
         <span class="bubble bubble--pill b-views" style="--pd:.35s">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg>
           <b>+800%</b><small>de vues</small>
         </span>
-
         <span class="bubble bubble--circle b-play" style="--pd:.5s">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </span>
-
         <span class="bubble bubble--card b-story" style="--pd:.65s">
           <span class="bubble-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg></span>
           <span class="bubble-lines"><em>Story vue</em><b>4 210 fois</b></span>
         </span>
-
         <span class="bubble bubble--card b-followers" id="liveFollowers" style="--pd:.6s">
           <span class="bubble-ico up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m23 6-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></span>
           <span class="bubble-lines"><b><span data-live>12 480</span></b><em>abonnés</em></span>
@@ -559,8 +526,6 @@
 
       <div class="map-radar reveal">
         <div id="map" role="img" aria-label="Carte de localisation de Neopure à Montpellier"></div>
-        <span class="radar-ping" aria-hidden="true"></span>
-        <span class="radar-ping radar-ping--2" aria-hidden="true"></span>
         <span class="radar-core" aria-hidden="true">
           <svg viewBox="0 0 30 42" aria-hidden="true">
             <defs>
@@ -576,10 +541,14 @@
         </span>
       </div>
       <div class="map-caption reveal" data-delay="1">
-        <p class="eyebrow">On te trouve où que tu sois</p>
+        <p class="eyebrow">On capte ton audience où qu'elle soit</p>
         <h2>Basés à <span class="gradient-text">Montpellier</span>,<br />on rayonne partout.</h2>
         <p class="map-caption-text">Ton audience, on sait où la capter. On scanne, on cible, on fait mouche.</p>
-        <a href="tel:+33611670705" class="btn btn-primary" data-magnetic data-cursor="Appelle">Appelle-nous</a>
+        <div class="map-cta">
+          <a href="tel:+33611670705" class="btn btn-primary">Appelle-nous</a>
+          <!-- TODO: remplacer #contact par le vrai lien Calendly -->
+          <a href="https://calendly.com/neopurecom/30min" target="_blank" rel="noopener" class="btn btn-book" data-calendly>Réserver un appel</a>
+        </div>
       </div>
     </section>
 
@@ -594,11 +563,11 @@
         </a>
         <p>Agence de communication &amp; événementiel.<br />On fait briller ta marque, on orchestre tes événements.</p>
         <div class="footer-socials">
-          <a href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" data-magnetic data-cursor="Instagram" aria-label="Instagram @neopure_com">
+          <a href="https://www.instagram.com/neopure_com/" target="_blank" rel="noopener" aria-label="Instagram @neopure_com">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             <span>@neopure_com</span>
           </a>
-          <a href="https://wa.me/33611670705" target="_blank" rel="noopener" data-magnetic data-cursor="WhatsApp" aria-label="WhatsApp">
+          <a href="https://wa.me/33611670705" target="_blank" rel="noopener" aria-label="WhatsApp">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.82 9.82 0 0 0 1.515 5.26l-.999 3.648 3.973-1.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413z"/></svg>
             <span>WhatsApp</span>
           </a>
@@ -614,12 +583,30 @@
     <div class="footer-bottom">
       <div class="container">
         <p>© <span id="year">2025</span> — Neopure Com'</p>
-        <p class="footer-credit">Site conçu et pensé par <a href="https://www.instagram.com/the0_hgg/" target="_blank" rel="noopener" data-cursor="Instagram">@the0_hgg</a></p>
+        <p class="footer-credit">Site conçu et pensé par <a href="https://www.instagram.com/the0_hgg/" target="_blank" rel="noopener">@the0_hgg</a></p>
       </div>
     </div>
   </footer>
   </div><!-- /.h-track -->
   </div><!-- /.h-viewport -->
+
+  <!-- ====================== MODALE CALENDLY (réserver un appel) ====================== -->
+  <div class="cal-modal" id="calModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Réserver un appel">
+    <div class="cal-panel" role="document">
+      <button class="cal-close" id="calClose" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="cal-frame" id="calFrame"><!-- iframe Calendly injecté à l'ouverture --></div>
+    </div>
+  </div>
+
+  <!-- ====================== BULLE SERVICE (popover discret) ====================== -->
+  <div class="svc-pop" id="svcPop" role="dialog" aria-label="Détail du service" hidden>
+    <button class="svc-pop-close" type="button" aria-label="Fermer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="svc-pop-body"><!-- contenu injecté ici --></div>
+  </div>
 
   <!-- ====================== LIGHTBOX (galerie plein écran) ====================== -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Visionneuse">
@@ -636,6 +623,23 @@
       <button class="legal-close" id="legalClose" aria-label="Fermer">&times;</button>
       <div class="legal-body" id="legalBody"><!-- contenu injecté ici --></div>
     </div>
+  </div>
+
+  <!-- Explications des services (stockées cachées, clonées dans la bulle au clic) -->
+  <div class="svc-store" hidden aria-hidden="true">
+    <article data-svc-doc="com-1"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--com">La Com'</p><h2>Gestion des réseaux sociaux</h2><p>On prend les rênes de tes comptes : planification, publication, réponses aux messages et veille. Tu gardes la main sur ta marque, on fait tourner la machine au quotidien.</p></article>
+    <article data-svc-doc="com-2"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--com">La Com'</p><h2>Création de contenus</h2><p>On vient tourner sur site — photo, vidéo, reels — puis on monte des contenus qui te ressemblent, prêts à poster. Concrètement : tu nous dis où et quand, on débarque avec le matos et l'œil.</p></article>
+    <article data-svc-doc="com-3"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--com">La Com'</p><h2>Développement commercial</h2><p>On transforme ta visibilité en clients : offres claires, prise de contact, tunnels simples. L'objectif, c'est le business — pas juste les likes.</p></article>
+    <article data-svc-doc="com-4"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--com">La Com'</p><h2>Stratégie digitale &amp; Ads</h2><p>On pose un plan clair et on lance des campagnes payantes ciblées (Meta, TikTok…) pour aller chercher la bonne audience, au bon moment, sans cramer ton budget.</p></article>
+    <article data-svc-doc="com-5"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--com">La Com'</p><h2>Optimisation du profil</h2><p>On rend ton profil clair et vendeur : bio, mise en avant, identité visuelle, liens. La première impression qui donne envie de te suivre — et de te contacter.</p></article>
+    <article data-svc-doc="com-6"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--com">La Com'</p><h2>Calendrier de contenus</h2><p>On planifie tes posts à l'avance : thèmes, formats, dates. Fini le « on poste quoi aujourd'hui ? » : tu sais exactement ce qui sort et quand.</p></article>
+
+    <article data-svc-doc="event-1"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--event">L'Event</p><h2>Coordination &amp; logistique</h2><p>On orchestre ton événement de A à Z : prestataires, planning, présence sur place le jour J. Toi tu profites, nous on gère les coulisses.</p></article>
+    <article data-svc-doc="event-2"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--event">L'Event</p><h2>DJ &amp; animation</h2><p>On met l'ambiance : DJ, sono, animation calée sur ton public. Une soirée qui reste dans les têtes (et sur les stories).</p></article>
+    <article data-svc-doc="event-3"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--event">L'Event</p><h2>Photographe &amp; vidéaste</h2><p>On capte les meilleurs moments en photo et en vidéo, prêts à partager et à réutiliser ensuite en communication (aftermovie, reels, souvenirs).</p></article>
+    <article data-svc-doc="event-4"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--event">L'Event</p><h2>Team building &amp; séminaire</h2><p>On conçoit des moments qui soudent tes équipes : activités, format, lieu. Utile, fédérateur et mémorable — pas une réunion déguisée.</p></article>
+    <article data-svc-doc="event-5"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--event">L'Event</p><h2>Communication évènementielle</h2><p>On fait connaître ton événement avant, pendant et après : teasing, couverture live, aftermovie. On remplit la salle et on prolonge l'impact.</p></article>
+    <article data-svc-doc="event-6"><p class="legal-eyebrow svc-eyebrow svc-eyebrow--event">L'Event</p><h2>Stratégie d'acquisition</h2><p>On remplit ta salle : ciblage, billetterie, campagnes. Des inscrits concrets, pas juste des vues qui font plaisir.</p></article>
   </div>
 
   <!-- Contenu des documents légaux (stocké caché, cloné dans la modale au clic) -->
@@ -736,7 +740,7 @@
       <p>Un cookie est un petit fichier déposé sur votre appareil lors de la visite d'un site, permettant de mémoriser certaines informations relatives à votre navigation.</p>
 
       <h3>2. Les cookies utilisés sur ce site</h3>
-      <p>Ce site est volontairement minimaliste : il n'utilise <strong>aucun cookie publicitaire ni traceur tiers</strong>. Seul un stockage technique local (sessionStorage) est utilisé pour mémoriser que l'animation d'intro a déjà été vue durant votre session. Cette information reste sur votre appareil et n'est jamais transmise à des tiers.</p>
+      <p>Ce site est volontairement minimaliste : il n'utilise <strong>aucun cookie publicitaire ni traceur tiers</strong>, et ne dépose aucun cookie ni stockage local pour son propre compte.</p>
 
       <h3>3. Services externes</h3>
       <p>Certains contenus (carte de localisation, liens vers Instagram ou WhatsApp) peuvent rediriger vers des services tiers disposant de leurs propres politiques de cookies, sur lesquelles nous n'avons pas la main.</p>
@@ -753,8 +757,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
-  <script src="js/main.js?v=20260604h" defer></script>
-  <script src="js/horizontal.js?v=20260604h" defer></script>
-  <script src="js/experience.js?v=20260604h" defer></script>
+  <script src="js/main.js?v=20260708j" defer></script>
+  <script src="js/horizontal.js?v=20260708j" defer></script>
+  <script src="js/experience.js?v=20260708j" defer></script>
 </body>
 </html>

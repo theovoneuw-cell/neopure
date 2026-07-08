@@ -149,8 +149,8 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   /* Fond peint dès le 1er paint → pas de flash noir du navigateur (mode sombre OS)
-     entre le refresh et l'apparition du fond du body/world-bg. */
-  background-color: #151626;
+     entre le refresh et l'apparition du fond du body/world-bg. Base charte : #2f173b. */
+  background-color: #2f173b;
 }
 
 body {
@@ -160,7 +160,11 @@ body {
   font-weight: 400;                    /* Gotham Book par défaut pour tout le texte courant */
   line-height: 1.6;
   color: var(--np-ink);
-  background: var(--np-bg);
+  /* IMPORTANT : le body reste TRANSPARENT. .world-bg est fixed + z-index négatif ;
+     un fond opaque sur <body> se peint AU-DESSUS de lui dans l'ordre de peinture
+     CSS (les descendants non positionnés du contexte racine passent devant les
+     descendants à z-index négatif) et masquerait complètement le dégradé. */
+  background: transparent;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -171,6 +175,9 @@ h1, h2, h3, h4 {
   line-height: 1.1;
   margin: 0 0 0.4em;
   letter-spacing: -0.03em;
+  /* Léger relief : garde les titres lisibles quelle que soit la zone du
+     dégradé (vif ou profond) derrière eux. */
+  text-shadow: 0 2px 16px rgba(15, 5, 26, 0.35);
 }
 
 p { margin: 0 0 1rem; font-weight: 400; }
@@ -200,6 +207,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  /* Ombre portée derrière le texte en dégradé : le détache du fond charte,
+     vif ou profond, sans altérer les couleurs de la charte elle-même. */
+  filter: drop-shadow(0 2px 14px rgba(15, 5, 26, 0.4));
 }
 
 .eyebrow {
@@ -245,12 +255,42 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .btn-primary {
   color: #fff;
-  /* Dégradé horizontal pur : pas de diagonale qui ferait une cassure visible
-     sur les coins arrondis du bouton-pilule. */
-  background-image: linear-gradient(90deg, #e94fd8 0%, #a435f0 55%, #7b2ff0 100%);
-  box-shadow: var(--shadow-glow);
+  /* Dégradé horizontal pur (charte) : pas de diagonale qui casse sur les coins.
+     border transparent -> couleur pleine + background-clip padding-box pour
+     supprimer le liseré clair ("blanc moche") sur le bord droit arrondi. */
+  border: none;
+  background-image: linear-gradient(95deg, #d94fd0 0%, #b92afa 52%, #7b2ff0 100%);
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  /* Ombre resserrée et franchement violette (fini le halo diffus qui bavait) +
+     léger reflet interne en haut pour un rendu "pilule" net. */
+  box-shadow:
+    0 10px 28px -8px rgba(185, 42, 250, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
-.btn-primary:hover { box-shadow: 0 14px 50px rgba(188, 107, 242, 0.5); }
+.btn-primary:hover {
+  box-shadow:
+    0 14px 34px -8px rgba(185, 42, 250, 0.62),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+/* Bouton "réserver un appel" — violet charte #BC6BF2, pensé pour ressortir */
+.btn-book {
+  color: #fff;
+  border: none;
+  background-image: linear-gradient(100deg, #BC6BF2 0%, #a24fe6 100%);
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  box-shadow:
+    0 10px 30px -6px rgba(188, 107, 242, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.btn-book:hover {
+  box-shadow:
+    0 14px 38px -6px rgba(188, 107, 242, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.btn-book svg { width: 18px; height: 18px; }
 
 .btn-ghost {
   color: var(--np-white);
@@ -397,33 +437,25 @@ ul { margin: 0; padding: 0; list-style: none; }
   opacity: 0.1;
   z-index: 0;
   pointer-events: none;
-  animation: heroWatermark 14s var(--ease) infinite alternate;
-}
-@keyframes heroWatermark {
-  from { transform: translateY(-50%) rotate(-8deg) scale(1); opacity: 0.08; }
-  to   { transform: translateY(-50%) rotate(-6deg) scale(1.04); opacity: 0.13; }
 }
 /* Pas de watermark sur mobile (l'écran est déjà chargé) */
 @media (max-width: 720px) {
   .hero::before { display: none; }
 }
 
-/* Fond dégradé animé (léger, GPU-friendly) */
+/* Fond dégradé (statique) */
 .hero-bg {
   position: absolute;
-  inset: -20%;
+  inset: 0;
   z-index: -2;
-  background:
-    radial-gradient(55% 70% at 20% 25%, rgba(214, 148, 242, 0.42), rgba(214, 148, 242, 0) 72%),
-    radial-gradient(60% 75% at 80% 20%, rgba(188, 107, 242, 0.42), rgba(188, 107, 242, 0) 72%),
-    radial-gradient(65% 80% at 60% 85%, rgba(53, 242, 242, 0.30), rgba(53, 242, 242, 0) 72%),
-    linear-gradient(135deg, #1f1545 0%, #5a2a93 45%, #BC6BF2 100%);
-  background-size: 160% 160%;
-  animation: heroShift 18s var(--ease) infinite alternate;
-}
-@keyframes heroShift {
-  0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 0%; }
-  100% { background-position: 30% 20%, 70% 30%, 40% 70%, 100% 100%; }
+  /* Même dégradé vertical que le fond global (vidéo de fond à venir). */
+  background: linear-gradient(180deg,
+    #c21ff0 0%,
+    #b92afa 16%,
+    #a022de 38%,
+    #6f2aa0 62%,
+    #43205e 84%,
+    #2f173b 100%);
 }
 
 /* Voile sombre pour la lisibilité du texte */
@@ -437,27 +469,33 @@ ul { margin: 0; padding: 0; list-style: none; }
     linear-gradient(180deg, rgba(23, 20, 48, 0) 55%, rgba(15, 12, 35, 0.35) 100%);
 }
 
-/* Formes de verre flottantes */
-.hero-shape {
+/* Vidéo de fond du hero — prend TOUTE la page d'accueil (comme l'ancien
+   site) : plein cadre derrière le contenu, recadrée au centre. */
+.hero-video {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;   /* le sujet du format story est cadré haut/centre */
   z-index: -1;
-  border-radius: 50%;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: float 9s ease-in-out infinite;
 }
-.hero-shape--1 { width: 130px; height: 130px; top: 18%; left: 12%; }
-.hero-shape--2 { width: 90px;  height: 90px;  top: 62%; left: 18%; animation-delay: -2s; }
-.hero-shape--3 { width: 160px; height: 160px; top: 24%; right: 12%; animation-delay: -4s; }
-.hero-shape--4 { width: 70px;  height: 70px;  bottom: 16%; right: 20%; animation-delay: -1s; }
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-22px) rotate(8deg); }
+/* Voile sombre par-dessus la vidéo : garde le logo/slogan/CTA parfaitement
+   lisibles quel que soit le contenu de la vidéo derrière. */
+.hero:has(.hero-video)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 70% at 38% 42%, rgba(20, 8, 32, 0.35), rgba(20, 8, 32, 0.7) 92%),
+    linear-gradient(180deg, rgba(20, 8, 32, 0.35) 0%, rgba(15, 6, 26, 0.55) 100%);
 }
+/* Le dégradé statique (.hero-bg) s'efface : la vidéo prend sa place. */
+.hero:has(.hero-video) .hero-bg { display: none; }
 
-.hero-inner { position: relative; max-width: 980px; width: 100%; }
+.hero-inner { position: relative; z-index: 2; max-width: 980px; width: 100%; }
 
 /* — Hero éditorial : en-tête (badge gauche / méta droite) — */
 .hero-top {
@@ -480,34 +518,6 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: rgba(255, 255, 255, 0.55);
 }
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  margin-bottom: 26px;
-  font-family: var(--font-head);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.hero-badge .pulse {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--np-cyan);
-  box-shadow: 0 0 0 0 rgba(53, 242, 242, 0.7);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(53, 242, 242, 0.7); }
-  70%  { box-shadow: 0 0 0 12px rgba(53, 242, 242, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(53, 242, 242, 0); }
-}
-
 .hero-title {
   margin-bottom: 18px;
   display: block;
@@ -519,11 +529,6 @@ ul { margin: 0; padding: 0; list-style: none; }
   width: clamp(280px, 56vw, 640px);
   height: auto;
   filter: drop-shadow(0 0 32px rgba(188, 107, 242, 0.45));
-  animation: heroLogoPulse 4.4s var(--ease) infinite alternate;
-}
-@keyframes heroLogoPulse {
-  from { filter: drop-shadow(0 0 24px rgba(53, 242, 242, 0.35)); }
-  to   { filter: drop-shadow(0 0 40px rgba(188, 107, 242, 0.65)); }
 }
 
 .hero-tagline {
@@ -569,13 +574,18 @@ ul { margin: 0; padding: 0; list-style: none; }
   background: var(--np-cyan);
   box-shadow: 0 0 12px rgba(53, 242, 242, 0.5);
 }
+/* Séparateur : un petit rond cyan (remplace l'ancienne croix ×) */
 .hero-tag-x {
   display: inline-block;
-  padding: 0 4px;
-  color: var(--np-cyan);
-  font-weight: 400;
-  font-size: 1.1em;
-  vertical-align: -0.04em;
+  width: 7px;
+  height: 7px;
+  margin: 0 3px;
+  border-radius: 50%;
+  border: 1.5px solid var(--np-cyan);
+  box-shadow: 0 0 10px rgba(53, 242, 242, 0.55);
+  vertical-align: middle;
+  font-size: 0;            /* masque le glyphe × présent dans le HTML */
+  line-height: 0;
 }
 
 /* — Slogan du hero (allégé : une seule ligne, propre) — */
@@ -698,30 +708,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
-/* Indicateur de scroll — retiré du design (encombrant, inutile en horizontal) */
-.hero-scroll { display: none !important; }
-.hero-scroll .mouse {
-  width: 24px; height: 38px;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 14px;
-  position: relative;
-}
-.hero-scroll .mouse::after {
-  content: "";
-  position: absolute;
-  top: 7px; left: 50%;
-  width: 4px; height: 7px;
-  margin-left: -2px;
-  border-radius: 2px;
-  background: #fff;
-  animation: wheel 1.6s infinite;
-}
-@keyframes wheel {
-  0% { opacity: 0; transform: translateY(0); }
-  40% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(12px); }
-}
-
 /* 6. MARQUEE =============================================================== */
 .marquee {
   background: var(--np-navy);
@@ -768,30 +754,22 @@ section { position: relative; }
 .n-float--a {
   width: clamp(180px, 22vw, 320px); aspect-ratio: 1 / 1;
   top: 7%; right: -3%;
-  animation: nFloatA 17s ease-in-out infinite alternate;
+  transform: rotate(8deg);
 }
 .n-float--b {
   width: clamp(150px, 17vw, 250px); aspect-ratio: 1 / 1;
   bottom: 6%; left: -2%; opacity: 0.045;
-  animation: nFloatB 21s ease-in-out infinite alternate;
+  transform: rotate(-10deg);
 }
 .n-float--c {
   width: clamp(160px, 19vw, 280px); aspect-ratio: 1 / 1;
   top: 12%; left: 4%; opacity: 0.04;
-  animation: nFloatA 19s ease-in-out infinite alternate;
+  transform: rotate(8deg);
 }
 .n-float--d {
   width: clamp(170px, 20vw, 300px); aspect-ratio: 1 / 1;
   bottom: 8%; right: 2%;
-  animation: nFloatB 23s ease-in-out infinite alternate;
-}
-@keyframes nFloatA {
-  from { transform: translateY(0) rotate(8deg); }
-  to   { transform: translateY(-26px) rotate(4deg); }
-}
-@keyframes nFloatB {
-  from { transform: translateY(0) rotate(-10deg); }
-  to   { transform: translateY(22px) rotate(-6deg); }
+  transform: rotate(-10deg);
 }
 @media (max-width: 720px) {
   /* Mobile : on n'en garde qu'un par section, un peu plus petit, pour rester léger */
@@ -931,8 +909,7 @@ section { position: relative; }
   transition: opacity 0.4s var(--ease);
   pointer-events: none;
 }
-/* Survol : pas de déplacement (évite toute déformation dans le contexte 3D
-   du coverflow) — seul le liseré dégradé + le halo s'intensifient. */
+/* Survol : pas de déplacement — seul le liseré dégradé + le halo s'intensifient. */
 .collab-card:hover {
   border-color: transparent;
   box-shadow:
@@ -1075,6 +1052,19 @@ section { position: relative; }
 
 .collab-title { margin-bottom: 18px; text-align: center; }
 
+/* CTA sous les logos clients : prise de rendez-vous rapide */
+.collab-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+.collab-cta-note {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
 /* 7b. GALERIE -------------------------------------------------------------- */
 .gallery-section { padding: 40px 0 90px; background: var(--np-white); }
 .gallery-heading {
@@ -1085,6 +1075,20 @@ section { position: relative; }
   line-height: 1.25;
 }
 .gallery-heading-strong { color: var(--np-ink); }
+.nowrap { white-space: nowrap; }
+
+/* Accroche stratégie sous le titre de la galerie */
+.gallery-accroche {
+  text-align: center;
+  max-width: 640px;
+  margin: -28px auto 44px;
+  font-family: var(--font-head);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+}
 
 /* Galerie compacte : UNE seule rangée horizontale qui défile (swipe) → peu de hauteur */
 .gallery {
@@ -1202,7 +1206,7 @@ section { position: relative; }
 }
 /* Note : ::before retiré — il créait un voile rectangulaire légèrement plus sombre
    que le world-bg autour, donc une couture verticale visible au bord du panneau
-   en mode coverflow. Le world-bg fait déjà les halos colorés. */
+   en scroll horizontal. Le world-bg fait déjà les halos colorés. */
 /* Lead « L'algo ? C'est notre pote. » au-dessus du titre Services */
 .services-lead {
   position: relative;
@@ -1440,17 +1444,31 @@ section { position: relative; }
   transition: color 0.25s var(--ease), padding-left 0.3s var(--ease);
 }
 .sector-list li:last-child { border-bottom: none; }
-/* Flèche révélée au survol — micro signal directionnel */
+/* Chaque service est cliquable → ouvre une bulle d'explication */
+.sector-list li[data-svc] { cursor: pointer; }
+.sector-list li[data-svc]:focus-visible {
+  outline: none;
+  padding-left: 6px;
+  color: #fff;
+}
+.sector--com   .sector-list li[data-svc]:focus-visible { box-shadow: inset 3px 0 0 var(--np-cyan); }
+.sector--event .sector-list li[data-svc]:focus-visible { box-shadow: inset 3px 0 0 var(--np-violet); }
+/* Petit « + » indiquant qu'on peut cliquer, remplacé par une flèche au survol */
 .sector-list li::after {
-  content: "→";
+  content: "+";
   font-weight: 500;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.5);
-  opacity: 0;
-  transform: translateX(-8px);
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.32);
+  opacity: 1;
+  transform: translateX(0);
   transition: opacity 0.25s var(--ease), transform 0.3s var(--ease), color 0.25s var(--ease);
 }
-.sector-list li:hover::after { opacity: 1; transform: translateX(0); }
+.sector-list li:hover::after {
+  content: "→";
+  font-size: 0.95rem;
+  opacity: 1;
+  transform: translateX(0);
+}
 .sector--com .sector-list li:hover::after   { color: var(--np-cyan); }
 .sector--event .sector-list li:hover::after { color: var(--np-pink); }
 .sector-list li::before {
@@ -1475,14 +1493,18 @@ section { position: relative; }
   justify-content: center;
   padding: 0 32px;
 }
+/* Liaison entre les deux secteurs : un rond en dégradé (remplace la croix ×) */
 .sector-bridge-mark {
-  font-family: var(--font-head);
-  font-weight: 200;
-  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
-  line-height: 1;
-  color: transparent;
+  display: block;
+  width: clamp(34px, 4vw, 52px);
+  aspect-ratio: 1;
+  border-radius: 50%;
   background: linear-gradient(180deg, var(--np-cyan), var(--np-violet));
-  -webkit-background-clip: text; background-clip: text;
+  /* Anneau : on évide le centre */
+  -webkit-mask: radial-gradient(closest-side, transparent 60%, #000 62%);
+          mask: radial-gradient(closest-side, transparent 60%, #000 62%);
+  box-shadow: 0 0 22px rgba(188, 107, 242, 0.35);
+  font-size: 0;            /* masque le glyphe × présent dans le HTML */
   user-select: none;
 }
 
@@ -1548,6 +1570,38 @@ section { position: relative; }
 .team-content p { color: var(--np-muted); max-width: 60ch; }
 .team-content p strong { color: var(--np-ink); }
 
+/* Colonne visuelle : teaser au-dessus de la carte + lien "Qui sommes-nous ?" */
+.team-visual { display: flex; flex-direction: column; align-items: center; }
+.team-kicker {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.62);
+  margin: 0 0 14px;
+  text-align: center;
+}
+.team-photo { width: 100%; }
+.team-more {
+  display: inline-block;               /* pas de flex → "→" ne se détache jamais */
+  margin-top: 22px;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 3px;
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.team-more:hover { border-color: var(--np-cyan); }
+.team-more .tm-arrow {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--np-cyan);
+  transition: transform 0.25s var(--ease);
+}
+.team-more:hover .tm-arrow { transform: translateX(3px); }
+
 /* 7e. CONTACT -------------------------------------------------------------- */
 .contact {
   padding: 100px 0 0;
@@ -1603,9 +1657,9 @@ section { position: relative; }
   font-size: 0.85rem;
   padding: 8px 14px;
   border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.78);
+  background: rgba(18, 8, 28, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.92);
   cursor: pointer;
   transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
               border-color 0.25s var(--ease), transform 0.25s var(--ease),
@@ -1631,7 +1685,6 @@ section { position: relative; }
 /* Confirmation après envoi (remplace le formulaire) */
 .form-success {
   padding: 30px 0;
-  animation: bubblePop 0.5s var(--ease) both;
 }
 .form-success h3 {
   font-size: clamp(1.5rem, 4vw, 2rem);
@@ -1646,10 +1699,12 @@ section { position: relative; }
   position: relative;
   padding: 36px 32px;
   border-radius: 22px;
+  /* Fond assombri (pas juste un voile blanc à 3.5%) : le panneau se détache
+     nettement du dégradé vif, texte et icônes restent lisibles. */
   background:
-    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 65%),
-    rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 65%),
+    rgba(18, 8, 28, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-top-color: rgba(188, 107, 242, 0.45);
   color: #fff;
   overflow: hidden;
@@ -1661,22 +1716,6 @@ section { position: relative; }
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.4s var(--ease);
-}
-.contact-info::before {
-  content: "→";
-  position: absolute;
-  top: -0.06em;
-  right: -0.02em;
-  font-family: var(--font-head);
-  font-weight: 900;
-  font-size: clamp(7rem, 13vw, 12rem);
-  line-height: 0.82;
-  letter-spacing: -0.05em;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.07;
-  color: #fff;
-  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
 }
 .contact-info::after {
   content: "";
@@ -1697,11 +1736,10 @@ section { position: relative; }
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.18);
 }
-.contact-info:hover::before { opacity: 0.11; transform: translate(-6px, 4px); }
 .contact-info:hover::after { left: 12px; right: 12px; }
 .contact-info > * { position: relative; z-index: 1; }
 .contact-info h3 { font-size: 1.2rem; margin-bottom: 12px; }
-.contact-hours { color: rgba(255, 255, 255, 0.72); margin-bottom: 24px; }
+.contact-hours { color: rgba(255, 255, 255, 0.85); margin-bottom: 24px; }
 .contact-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
 .contact-list li { display: flex; align-items: center; gap: 12px; }
 .ci-ico { display: grid; place-items: center; color: var(--np-cyan); }
@@ -1813,402 +1851,12 @@ section { position: relative; }
   .stat-num { font-size: clamp(2.4rem, 12vw, 3.2rem); }
 }
 
-/* 10. EXPÉRIENCE / INTERACTIONS SIGNATURE ================================== */
+/* 10. EXPÉRIENCE / INTERACTIONS ============================================ */
 
-/* 10a. Intro de marque (preloader) ---------------------------------------- */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: grid;
-  place-items: center;
-  background: #151626;
-  transition: opacity 0.4s ease;
-}
-/* Sortie : opacité seule (la transition sur visibility provoquait un flash Firefox) */
-.preloader.is-done {
-  opacity: 0;
-  pointer-events: none;
-}
+.hero-inner { position: relative; z-index: 3; }
 
-.preloader-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 22px;
-}
-
-/* Marqueur édito tout en haut (mêmes codes que le hero) */
-.preloader-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  font-family: var(--font-head);
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-}
-.preloader-tag-bar {
-  width: 30px; height: 1.5px;
-  background: var(--np-cyan);
-  box-shadow: 0 0 12px rgba(53, 242, 242, 0.55);
-}
-.preloader-tag-x {
-  color: var(--np-cyan);
-  font-weight: 400;
-  padding: 0 4px;
-  font-size: 1.05em;
-}
-
-/* Bloc des deux secteurs avec leur barre de progression */
-.preloader-sectors {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 6px;
-  width: min(300px, 78vw);
-}
-.preloader-sector {
-  display: grid;
-  grid-template-columns: 2.4ch auto 1fr;
-  align-items: center;
-  gap: 14px;
-}
-.preloader-sector-idx {
-  font-family: var(--font-head);
-  font-weight: 800;
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  font-variant-numeric: tabular-nums;
-}
-.preloader-sector--com .preloader-sector-idx   { color: var(--np-cyan); }
-.preloader-sector--event .preloader-sector-idx { color: var(--np-pink); }
-.preloader-sector-name {
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: -0.005em;
-}
-.preloader-sector-bar {
-  display: block;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-.preloader-sector-bar span {
-  display: block;
-  height: 100%;
-  width: 100%;
-  border-radius: 2px;
-  transform: scaleX(0);
-  transform-origin: left;
-}
-.preloader-sector--com .preloader-sector-bar span {
-  background: var(--np-cyan);
-  box-shadow: 0 0 10px rgba(53, 242, 242, 0.7);
-  animation: preBarFill 2.6s var(--ease) 0.2s forwards;
-}
-.preloader-sector--event .preloader-sector-bar span {
-  background: var(--np-violet);
-  box-shadow: 0 0 10px rgba(188, 107, 242, 0.7);
-  animation: preBarFill 3s var(--ease) 0.5s forwards;
-}
-@keyframes preBarFill { to { transform: scaleX(1); } }
-
-/* Petite phrase italique en bas qui respire doucement */
-.preloader-status {
-  font-family: var(--font-head);
-  font-style: italic;
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.55);
-  margin: 12px 0 0;
-  animation: preStatusBreath 1.8s var(--ease) infinite alternate;
-}
-@keyframes preStatusBreath {
-  from { opacity: 0.4; }
-  to   { opacity: 0.9; }
-}
-
-.preloader-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  animation: preIn 0.7s var(--ease) forwards;
-}
-.preloader-logo-img {
-  height: clamp(46px, 10vw, 68px);
-  width: auto;
-  display: block;
-  filter: drop-shadow(0 0 22px rgba(188, 107, 242, 0.55));
-}
-.preloader-bar {
-  width: 170px;
-  height: 3px;
-  margin-top: 20px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.14);
-  overflow: hidden;
-}
-.preloader-bar span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: var(--grad-brand);
-  animation: preBar 1.2s var(--ease) 0.15s forwards;
-}
-@keyframes preIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-@keyframes preBar { to { width: 100%; } }
-
-/* 10b. Barre de progression (story) --------------------------------------- */
-.scroll-progress {
-  position: fixed;
-  inset: 0 0 auto 0;
-  height: 3px;
-  z-index: 9997;
-  background: rgba(255, 255, 255, 0.16);
-}
-.scroll-progress span {
-  display: block;
-  height: 100%;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: var(--grad-brand);
-}
-
-/* 10c. Grain cinématographique -------------------------------------------- */
-.grain {
-  position: fixed;
-  inset: -50%;
-  z-index: 9996;
-  pointer-events: none;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 0.6s steps(3) infinite;
-}
-@keyframes grain {
-  0%   { transform: translate(0, 0); }
-  33%  { transform: translate(-4%, 2%); }
-  66%  { transform: translate(3%, -3%); }
-  100% { transform: translate(0, 0); }
-}
-
-/* 10d. Curseur signature -------------------------------------------------- */
-.cursor { display: none; pointer-events: none; }
-.cursor * { pointer-events: none; }
-.cursor.is-hidden { opacity: 0; }
-.cursor-dot, .cursor-ring {
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 9998;
-  border-radius: 50%;
-  pointer-events: none;
-  will-change: transform;
-}
-/* Point central : cyan cerclé de blanc → visible sur fond clair ET sombre */
-.cursor-dot {
-  width: 9px; height: 9px;
-  margin: -4.5px 0 0 -4.5px;
-  background: var(--np-cyan);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 2px 8px rgba(12, 8, 26, 0.35);
-}
-/* Anneau cyan fin (contraste avec l'UI rose/violet sans se confondre avec) */
-.cursor-ring {
-  width: 30px; height: 30px;
-  margin: -15px 0 0 -15px;
-  border: 1.5px solid rgba(53, 242, 242, 0.7);
-  transition: width 0.25s var(--ease), height 0.25s var(--ease),
-              margin 0.25s var(--ease), background-color 0.25s var(--ease),
-              border-color 0.25s var(--ease);
-}
-.cursor.is-hover .cursor-ring {
-  width: 44px; height: 44px;
-  margin: -22px 0 0 -22px;
-  background: rgba(53, 242, 242, 0.08);
-  border-color: var(--np-cyan);
-}
-.cursor-label {
-  position: fixed;
-  top: 0; left: 0;
-  margin: 16px 0 0 16px;
-  padding: 4px 11px;
-  border-radius: var(--r-pill);
-  background: var(--np-cyan);
-  color: #151626;
-  font-family: var(--font-head);
-  font-weight: 600;
-  font-size: 0.72rem;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s var(--ease);
-}
-.cursor.has-label .cursor-label { opacity: 1; }
-
-/* Le POINTEUR NATIF reste toujours visible ; l'anneau ne fait que l'enrichir.
-   (On ne masque plus jamais le curseur système → fini le "je ne vois rien".) */
-.cursor-dot { display: none; }
-@media (hover: hover) and (pointer: fine) {
-  .cursor { display: block; }
-}
-
-/* 10e. Hero — FEED VIVANT (bulles d'engagement en parallaxe) -------------- */
-.hero-spotlight { display: none; }
-.hero-inner { position: relative; z-index: 3; transition: transform 0.25s var(--ease); will-change: transform; }
-
-.hero-feed { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.hero-feed-layer { position: absolute; inset: 0; transition: transform 0.3s var(--ease); will-change: transform; }
-
-/* Champ de bulles décoratives (réutilisé dans Contact + Carte) */
-.bubble-field { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.bubble-field .bubble { pointer-events: none; }
-/* Le contenu de ces sections reste au-dessus des bulles */
+/* Le contenu de ces sections reste au-dessus des N en filigrane */
 .contact-inner, .map-radar, .map-caption { position: relative; z-index: 2; }
-
-.bubble {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 10px 16px;
-  border-radius: 14px;
-  /* Style "sticker Instagram" : solide coloré, ombre tranchée, légèrement tilté */
-  background: #fff;
-  color: #15122b;
-  box-shadow:
-    0 4px 0 -1px rgba(0, 0, 0, 0.22),
-    0 14px 28px -6px rgba(8, 6, 20, 0.4);
-  font-family: var(--font-head);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  animation: floatY var(--fd, 7s) ease-in-out infinite alternate,
-             bubblePop 0.7s var(--ease) both;
-  animation-delay: 0s, var(--pd, 0s);
-}
-.bubble svg { width: 17px; height: 17px; }
-.bubble b { font-weight: 900; font-size: 0.98rem; }
-.bubble small { font-weight: 600; font-size: 0.72rem; opacity: 0.65; }
-
-/* Variants : chaque bulle = un sticker coloré différent, légèrement tilté */
-.b-likes {
-  background: var(--np-pink);
-  color: #fff;
-  transform: rotate(-4deg);
-}
-.b-likes svg { color: #fff; }
-
-.b-views {
-  background: var(--np-cyan);
-  color: #151626;
-  transform: rotate(2deg);
-}
-.b-views svg { color: #151626; }
-.b-views small { color: rgba(12, 10, 26, 0.65); opacity: 1; }
-
-.b-comments {
-  background: #fff;
-  color: #15122b;
-  transform: rotate(3deg);
-}
-.b-comments svg { color: var(--np-violet); }
-
-.b-hashtag {
-  background: #15122b;
-  color: var(--np-cyan);
-  font-weight: 900;
-  letter-spacing: 0;
-  transform: rotate(-2deg);
-}
-
-.b-play {
-  background: #15122b;
-  color: #fff;
-  transform: rotate(-6deg);
-}
-.b-play svg { color: var(--np-cyan); }
-
-.b-story {
-  background: var(--np-cyan);
-  color: #151626;
-  transform: rotate(-3deg);
-}
-.b-story .bubble-ico { background: rgba(0, 0, 0, 0.16); }
-.b-story .bubble-ico svg { color: #151626; }
-.b-story .bubble-lines em { color: rgba(12, 10, 26, 0.6); opacity: 1; }
-
-.b-follow {
-  background: var(--np-violet);
-  color: #fff;
-  transform: rotate(-2deg);
-}
-.b-follow .bubble-lines em { color: rgba(255, 255, 255, 0.7); opacity: 1; }
-
-.b-followers {
-  background: #15122b;
-  color: #fff;
-  transform: rotate(4deg);
-}
-.b-followers .bubble-lines em { color: rgba(255, 255, 255, 0.55); opacity: 1; }
-.b-followers .bubble-ico.up { background: rgba(53, 242, 242, 0.18); }
-.b-followers .bubble-ico.up svg { color: var(--np-cyan); }
-
-.bubble--circle {
-  width: 60px; height: 60px;
-  padding: 0;
-  border-radius: 50%;
-  justify-content: center;
-}
-.bubble--circle svg { width: 22px; height: 22px; }
-
-.bubble--card { padding: 11px 14px 11px 11px; }
-.bubble-lines { display: flex; flex-direction: column; line-height: 1.15; }
-.bubble-lines em { font-style: normal; font-weight: 600; font-size: 0.7rem; }
-.bubble-lines b { font-weight: 900; font-size: 0.9rem; }
-.bubble-ico {
-  display: grid; place-items: center;
-  width: 30px; height: 30px;
-  border-radius: 9px;
-  flex: 0 0 auto;
-  background: rgba(255, 255, 255, 0.16);
-}
-.bubble-avatar {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  flex: 0 0 auto;
-  background: var(--grad-brand);
-}
-.bubble--tag { padding: 8px 14px; font-size: 0.92rem; }
-
-/* Durée de flottement propre à chaque bulle */
-.b-likes     { --fd: 6.5s; }
-.b-views     { --fd: 7.5s; }
-.b-play      { --fd: 6s; }
-.b-comments  { --fd: 7s; }
-.b-follow    { --fd: 8s; }
-.b-followers { --fd: 7.2s; }
-.b-story     { --fd: 8.5s; }
-.b-hashtag   { --fd: 6.8s; }
-
-/* Éparpillement dans la zone CONTACT (en périphérie, autour du formulaire) */
-.contact .b-likes    { top: 9%;   left: 3%; }
-.contact .b-comments { top: 5%;   right: 5%; }
-.contact .b-follow   { bottom: 12%; left: 4%; }
-.contact .b-hashtag  { bottom: 7%;  right: 8%; }
-
-/* Éparpillement dans la zone CARTE (autour du radar) */
-.map-panel .b-views     { top: 11%;   left: 6%; }
-.map-panel .b-play      { top: 18%;   right: 8%; }
-.map-panel .b-story     { bottom: 14%; left: 7%; }
-.map-panel .b-followers { bottom: 11%; right: 6%; }
-
-@keyframes floatY { from { translate: 0 -11px; } to { translate: 0 13px; } }
-@keyframes bubblePop { from { opacity: 0; scale: 0.55; } to { opacity: 1; scale: 1; } }
 
 /* 10h. MENU ÉVOLUTIF (flottant — plus de barre en haut) ------------------- */
 .brand-float {
@@ -2235,13 +1883,6 @@ section { position: relative; }
   transition: transform 0.3s var(--ease), background-color 0.3s var(--ease);
 }
 .menu-btn:hover { transform: scale(1.06); background: rgba(255, 255, 255, 0.14); }
-.menu-ring {
-  position: absolute; inset: -4px; border-radius: 50%;
-  background: conic-gradient(var(--np-cyan) calc(var(--np-progress, 0) * 360deg), rgba(255, 255, 255, 0.14) 0);
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-          mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-  pointer-events: none;
-}
 .menu-ico { position: relative; width: 22px; height: 14px; }
 .menu-ico i {
   position: absolute; left: 0; width: 100%; height: 2px; border-radius: 2px; background: #fff;
@@ -2394,26 +2035,6 @@ section { position: relative; }
 .hero-wa:hover { border-color: #25d366; }
 .hero-ig svg { width: 18px; height: 18px; }
 
-/* Barre de progression du scroll (fine, en haut) ------------------------- */
-.scroll-progress {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  z-index: 250;
-  background: rgba(255, 255, 255, 0.07);
-  pointer-events: none;
-}
-.scroll-progress span {
-  display: block;
-  height: 100%;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: var(--grad-brand);
-  box-shadow: 0 0 12px rgba(188, 107, 242, 0.6);
-  transition: transform 0.05s linear;
-}
-
 /* 10j. NAV LATÉRALE ÉVOLUTIVE (desktop) — surligne la section courante ---- */
 .side-nav { display: none; }
 @media (min-width: 1025px) {
@@ -2462,10 +2083,7 @@ section { position: relative; }
 .footer-socials a:hover { color: #fff; background: rgba(255, 255, 255, 0.12); transform: translateY(-2px); }
 .footer-socials svg { width: 18px; height: 18px; }
 
-/* 10f. Tilt 3D ------------------------------------------------------------- */
-[data-tilt] { transform-style: preserve-3d; will-change: transform; }
-
-/* 10g. Carte RADAR (circulaire, sombre, sonar) ---------------------------- */
+/* 10g. Carte (rectangulaire, sombre) --------------------------------------- */
 .map-panel {
   background: var(--np-navy);
   color: #fff;
@@ -2489,24 +2107,37 @@ section { position: relative; }
     0 0 60px -12px rgba(188, 107, 242, 0.4),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
-/* Voile coloré léger par-dessus la carte pour la fondre dans l'univers violet */
+/* Voile coloré par-dessus la carte pour la teinter aux couleurs de la charte */
 .map-radar::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background:
-    radial-gradient(85% 85% at 50% 45%, rgba(188, 107, 242, 0.08), rgba(123, 47, 240, 0.28) 100%);
+  /* mix-blend-mode: color → reprend teinte + saturation du voile, garde la
+     structure (routes, blocs) de la carte : rendu franchement charte. */
+  background: linear-gradient(155deg,
+    rgba(188, 107, 242, 0.85) 0%,
+    rgba(123, 47, 240, 0.75) 55%,
+    rgba(53, 242, 242, 0.55) 100%);
   mix-blend-mode: color;
+}
+/* Deuxième voile très léger pour la profondeur (assombrit les bords) */
+.map-radar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(90% 90% at 50% 45%, rgba(47, 23, 59, 0), rgba(47, 23, 59, 0.4) 100%);
 }
 #map {
   width: 100%;
   height: 100%;
-  background: #2a1e60;
+  background: #3a1e5c;
   z-index: 0;
-  /* Tuiles Voyager teintées violet, mais plus lisibles qu'avant */
-  filter: saturate(0.72) brightness(0.92) hue-rotate(12deg);
+  /* On désature un peu le beige d'origine pour que le voile charte prenne bien */
+  filter: saturate(0.6) brightness(0.95) contrast(1.02);
 }
 .leaflet-container { font-family: var(--font-body); background: #2a1e60; }
 
@@ -2521,38 +2152,15 @@ section { position: relative; }
   z-index: 5;
   filter: drop-shadow(0 6px 16px rgba(53, 242, 242, 0.55))
           drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
-  animation: pinFloat 3.2s ease-in-out infinite alternate;
 }
 .radar-core svg { display: block; width: 100%; height: 100%; }
-@keyframes pinFloat {
-  from { transform: translate(-50%, calc(-100% - 22px)); }
-  to   { transform: translate(-50%, calc(-100% - 28px)); }
-}
-/* Pings sonar qui s'étendent depuis le centre */
-.radar-ping {
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 220px; height: 220px;
-  margin: -110px 0 0 -110px;        /* centrage sans transform → scale propre */
-  border-radius: 50%;
-  border: 2px solid var(--np-cyan);
-  z-index: 4;
-  transform: scale(0.07);
-  animation: ping 3.4s cubic-bezier(0, 0.4, 0.3, 1) infinite;
-}
-.radar-ping--2 { animation-delay: 1.7s; }
-/* Animation GPU pure (transform + opacity), plus de width/height = plus de layout */
-@keyframes ping {
-  0%   { transform: scale(0.07); opacity: 0.9; }
-  100% { transform: scale(1); opacity: 0; }
-}
 .map-caption { max-width: 460px; }
 .map-caption h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 6px 0 16px; }
 .map-caption-text { color: rgba(255, 255, 255, 0.72); margin-bottom: 26px; }
+.map-cta { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 
 /* 11. RESPONSIVE — interactions ------------------------------------------- */
 @media (max-width: 860px) {
-  .bubble { display: none; } /* mobile : on masque les bulles décoratives pour éviter l'encombrement */
   .brand-float { top: 18px; left: 18px; }
   .brand-float-logo { height: 58px; }
   .menu-btn { width: 54px; height: 54px; top: 16px; right: 18px; }
@@ -2570,8 +2178,6 @@ section { position: relative; }
     position: fixed;
     inset: 0;
     overflow: hidden;
-    perspective: 1700px;            /* profondeur 3D pour l'effet coverflow */
-    perspective-origin: 50% 50%;
   }
   .h-active .h-track {
     display: flex;
@@ -2580,16 +2186,16 @@ section { position: relative; }
     height: 100vh;
     position: relative;
     will-change: transform;
-    transform-style: preserve-3d;
-    gap: 130px;                      /* large espace : évite tout chevauchement entre panneaux en 3D */
-    pointer-events: none;            /* Firefox : le track 3D ne doit pas voler les clics destinés aux panneaux */
+    gap: 130px;                      /* large espace entre panneaux */
+    pointer-events: none;            /* Firefox : le track ne doit pas voler les clics destinés aux panneaux */
+    /* Pas de fond sur la piste : le dégradé VERTICAL fixe (world-bg) reste
+       visible derrière tous les panneaux → même dégradé vertical sur toute
+       l'horizontalité du site. */
+    background: transparent;
   }
+  /* Le hero laisse voir le dégradé vertical du fond (vidéo de fond à venir). */
+  .h-active .hero-bg { background: transparent; -webkit-mask-image: none; mask-image: none; }
   .h-active .h-track > main { display: contents; }
-  /* Chaque panneau (encadré) reçoit sa propre rotation 3D via JS */
-  .h-active .panel {
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-  }
 
   .h-active .panel {
     flex: 0 0 auto;
@@ -2605,7 +2211,7 @@ section { position: relative; }
 
   /* — HERO — plein écran, déjà centré — */
   .h-active .hero.panel { min-width: 100vw; padding: 0; }
-  /* En coverflow horizontal seulement : on fond les bords du hero vers le fond
+  /* En scroll horizontal seulement : on fond les bords du hero vers le fond
      sombre pour éviter une arête nette avec les panneaux voisins transparents. */
   .h-active .hero-bg {
     -webkit-mask-image: linear-gradient(90deg, transparent 4%, #000 14%, #000 86%, transparent 96%);
@@ -2632,7 +2238,7 @@ section { position: relative; }
   }
   .h-active .stats-collab .stats { min-width: 280px; }
   .h-active .stats-collab .collab { min-width: 360px; max-width: 420px; }
-  /* Le marquee a une largeur définie pour boucler proprement dans le coverflow */
+  /* Le marquee a une largeur définie pour boucler proprement en horizontal */
   .h-active .stats-collab .collab-marquee { width: 100%; }
 
   /* — GALERIE → frise horizontale — */
@@ -2651,7 +2257,7 @@ section { position: relative; }
     display: flex;
     align-items: center;
     gap: 16px;
-    overflow: visible;               /* pas de scroll interne : intégré au coverflow */
+    overflow: visible;               /* pas de scroll interne : intégré à la frise */
     scroll-snap-type: none;
     padding: 0;
     -webkit-mask-image: none;
@@ -2659,7 +2265,7 @@ section { position: relative; }
   }
   /* Filmstrip : hauteur fixe, largeur dérivée de l'aspect → rythme dynamique */
   .h-active .gallery-section .gallery-item {
-    height: 62vh;
+    height: 56vh;
     width: auto;
     aspect-ratio: 3 / 4;             /* portrait par défaut */
     grid-row: auto;
@@ -2669,7 +2275,7 @@ section { position: relative; }
   .h-active .gallery-section .gallery-item.g-wide { aspect-ratio: 16 / 10; }  /* paysages */
   /* Vidéos : tuiles plus petites et carrées → pas d'étirement de la basse def */
   .h-active .gallery-section .gallery-item.g-vid {
-    height: 42vh;
+    height: 38vh;
     aspect-ratio: 1 / 1;
     align-self: center;
   }
@@ -2711,7 +2317,12 @@ section { position: relative; }
   .h-active .contact .contact-inner {
     display: flex;
     gap: 40px;
-    align-items: center;
+    /* flex-start (pas center) : sur une fenêtre peu haute, un formulaire complet
+       peut dépasser 100vh — avec un centrage pur, ce débordement remonte le
+       contenu AU-DESSUS de son padding-top et le fait passer sous le menu
+       flottant. En ancrant en haut, le padding-top garantit toujours l'espace
+       de sécurité, quelle que soit la hauteur de la fenêtre ou du formulaire. */
+    align-items: flex-start;
     height: 100vh;
     width: auto;
     max-width: none;
@@ -2722,12 +2333,30 @@ section { position: relative; }
   /* — CARTE RADAR → en ligne (radar | texte) — */
   .h-active .map-panel.panel {
     flex-direction: row;
+    align-items: flex-start;             /* même raison que .contact-inner ci-dessus */
     gap: 6vw;
     padding: 0 6vw;
     text-align: left;
   }
-  .h-active .map-panel .map-radar { width: min(46vw, 620px); }
-  .h-active .map-panel .map-caption { text-align: left; }
+  .h-active .map-panel .map-radar { width: min(46vw, 620px); margin-top: 4vh; }
+  .h-active .map-panel .map-caption { text-align: left; margin-top: 4vh; }
+  .h-active .map-panel .map-cta { justify-content: flex-start; }
+
+  /* Zone de sécurité en haut de chaque panneau : le contenu ne passe jamais
+     sous la barre de navigation flottante (fixée à top:22px). Padding haut/bas
+     ÉGAUX (même valeur) : sinon, avec justify-content:center, un padding-top
+     plus grand que le padding-bottom décale visuellement tout le contenu vers
+     le bas (l'espace libre se répartit à égalité autour d'une boîte déjà
+     décalée) — c'est ce qui rendait la galerie "pas centrée, trop basse". */
+  .h-active .stats-collab .stats-collab-inner,
+  .h-active .gallery-section .container,
+  .h-active .services .container,
+  .h-active .team .team-inner,
+  .h-active .contact .contact-inner,
+  .h-active .map-panel.panel {
+    padding-top: clamp(72px, 9vh, 96px);
+    padding-bottom: clamp(72px, 9vh, 96px);
+  }
 
   /* — FOOTER → dernier panneau — */
   .h-active .site-footer.panel {
@@ -2770,9 +2399,6 @@ section { position: relative; }
     0%   { transform: translateY(0); }
     100% { transform: translateY(-50%); }
   }
-
-  /* L'indicateur "Scroll" du hero pointe vers la droite */
-  .h-active .hero-scroll { transform: translateX(-50%); }
 }
 
 /* 13. THÈME CONTINU (canvas unique, anti-compartiment) ===================== */
@@ -2783,23 +2409,21 @@ section { position: relative; }
   position: fixed;
   inset: 0;
   z-index: -2;
-  background:
-    radial-gradient(72% 92% at 14% 22%, rgba(188, 107, 242, 0.45), rgba(188, 107, 242, 0) 72%),
-    radial-gradient(66% 86% at 86% 26%, rgba(214, 148, 242, 0.40), rgba(214, 148, 242, 0) 72%),
-    radial-gradient(70% 84% at 78% 82%, rgba(53, 242, 242, 0.28), rgba(53, 242, 242, 0) 72%),
-    radial-gradient(78% 90% at 28% 92%, rgba(241, 196, 242, 0.18), rgba(241, 196, 242, 0) 74%),
-    #15162600;
-  background-color: #151626;
-  background-size: 165% 165%;
-  animation: worldDrift 26s var(--ease) infinite alternate;
-}
-@keyframes worldDrift {
-  0%   { background-position: 0% 50%, 100% 50%, 50% 0%, 50% 100%, 0 0; }
-  100% { background-position: 20% 40%, 80% 60%, 60% 20%, 40% 80%, 0 0; }
+  /* Dégradé VERTICAL charte, fidèle à la maquette : magenta-violet vif en haut,
+     violet profond en bas. Dégradé pur (pas de halo) pour coller au swatch. */
+  background: linear-gradient(180deg,
+    #c21ff0 0%,
+    #b92afa 16%,
+    #a022de 38%,
+    #6f2aa0 62%,
+    #43205e 84%,
+    #2f173b 100%);
+  background-color: #2f173b;
 }
 
-/* Base sombre */
-body { background: #151626; color: var(--np-white); }
+/* Base sombre (charte : violet profond) */
+/* NE PAS remettre de fond opaque ici : voir la note sur .world-bg plus haut. */
+body { background: transparent; color: var(--np-white); }
 .eyebrow { color: var(--np-pink); }
 
 /* Sections : transparentes → le canvas continu traverse tout */
@@ -2816,22 +2440,33 @@ body { background: #151626; color: var(--np-white); }
 .stat-label { color: rgba(255, 255, 255, 0.92); }
 .stat-label em { color: rgba(255, 255, 255, 0.55); }
 .gallery-heading-strong { color: #fff; }
-.team-content p { color: rgba(255, 255, 255, 0.68); }
-.team-content p strong { color: #fff; }
+/* Texte équipe : un poil plus dense et contrasté → confort de lecture
+   (Gotham Medium 500 au lieu de Book 400, moins de transparence) */
+.team-content p {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 500;
+  line-height: 1.7;
+}
+.team-content p strong { color: #fff; font-weight: 700; }
 
-/* Formulaire → champs en verre sombre */
-.field label { color: rgba(255, 255, 255, 0.9); }
+/* Formulaire → champs en verre sombre. Fond assez opaque et sombre pour
+   rester lisible même sur la zone la plus vive du dégradé (charte). */
+.field label {
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(20, 6, 32, 0.5);
+}
 .field input, .field textarea {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(18, 8, 28, 0.42);
+  border-color: rgba(255, 255, 255, 0.28);
   color: #fff;
 }
-.field input::placeholder, .field textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
+.field input::placeholder, .field textarea::placeholder { color: rgba(255, 255, 255, 0.58); }
 .field input:focus, .field textarea:focus {
-  border-color: var(--np-pink);
-  box-shadow: 0 0 0 3px rgba(188, 107, 242, 0.18);
+  border-color: var(--np-cyan);
+  background: rgba(18, 8, 28, 0.55);
+  box-shadow: 0 0 0 3px rgba(53, 242, 242, 0.22);
 }
-.form-note { color: rgba(255, 255, 255, 0.5); }
+.form-note { color: rgba(255, 255, 255, 0.68); }
 
 /* En-tête : verre sombre une fois scrollé */
 .site-header.is-scrolled {
@@ -2862,16 +2497,6 @@ body { background: #151626; color: var(--np-white); }
    14. MOBILE TUNING — finitions pour passer impeccable en < 1025 px
    ========================================================================== */
 
-/* ===== PERF MOBILE : fluidité du scroll sur smartphone =====
-   On coupe les animations de fond qui repeignent tout l'écran à chaque frame
-   (drift des dégradés, grain). Les dégradés restent — juste statiques. */
-@media (max-width: 1024px) {
-  .world-bg { animation: none; }
-  .hero-bg  { animation: none; }
-  .grain    { display: none; }          /* overlay fixe 4× écran : trop coûteux sur mobile */
-  .n-float  { animation: none; }        /* N en filigrane statique (toujours visibles) */
-}
-
 /* Garde anti-débordement horizontal pour TOUT le site en mobile */
 @media (max-width: 1024px) {
   html, body { overflow-x: hidden; max-width: 100%; }
@@ -2879,8 +2504,6 @@ body { background: #151626; color: var(--np-white); }
   .panel, section, .container, main { max-width: 100vw; }
   /* Watermarks décoratifs : contenus dans leur carte */
   .sector, .stat, .contact-info, .collab-card, .gallery-item { overflow: hidden; }
-  /* Formes flottantes du hero supprimées sur mobile (parasitent le layout) */
-  .hero-shape { display: none; }
   /* Aération des grandes sections */
   .hero { padding: 80px 0 90px; }
   .hero-inner { max-width: 100%; }
@@ -2953,7 +2576,6 @@ body { background: #151626; color: var(--np-white); }
   }
   .hero-social { width: 48px; height: 48px; }
   .hero-social svg { width: 20px; height: 20px; }
-  .hero-scroll  { display: none; }
 
   /* Wordmark centré sur mobile */
   .hero-title { text-align: center; }
@@ -2978,7 +2600,7 @@ body { background: #151626; color: var(--np-white); }
   .sector-tagline { font-size: 0.92rem; }
   .sector-list li { font-size: 0.96rem; padding: 14px 0; }
   .sector-bridge { padding: 14px 0; }
-  .sector-bridge-mark { font-size: clamp(1.8rem, 7vw, 2.4rem); }
+  .sector-bridge-mark { width: clamp(30px, 9vw, 40px); }
   .services-cta { gap: 16px 22px; margin-top: 32px; flex-direction: column; align-items: stretch; text-align: center; }
   .services-cta .btn-primary { width: 100%; }
 
@@ -3021,10 +2643,6 @@ body { background: #151626; color: var(--np-white); }
   .brand-float { top: 14px; left: 16px; }
   .brand-float-logo { height: 52px; }
   .menu-list a { font-size: clamp(2rem, 9vw, 3.6rem); }
-
-  /* Preloader plus compact */
-  .preloader-sectors { width: min(280px, 80vw); }
-  .preloader-logo-img { height: clamp(40px, 12vw, 56px); }
 }
 
 /* Très petits écrans (≤ 380 px — iPhone SE, anciens Android) */
@@ -3036,15 +2654,10 @@ body { background: #151626; color: var(--np-white); }
   .stat-num { font-size: 2.4rem; }
   .stat::before { font-size: 6rem; }
   .sector::before { font-size: 7rem; }
-  .contact-info::before { font-size: 6rem; }
 }
 
 /* 9. ACCESSIBILITÉ — reduced motion ======================================== */
 @media (prefers-reduced-motion: reduce) {
-  .world-bg { animation: none; }
-  .preloader { display: none; }
-  .grain { animation: none; }
-  .hero-inner { transform: none !important; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
@@ -3284,6 +2897,213 @@ body { background: #151626; color: var(--np-white); }
   margin: 0 0 10px;
   /* Réserve l'espace de la croix pour que l'en-tête ne passe pas dessous */
   padding-right: 44px;
+}
+/* ==========================================================================
+   BULLES D'ENGAGEMENT — discrètes, "incrustées", jamais de chevauchement
+   Par défaut masquées ; affichées uniquement sur grand écran (marges suffisantes),
+   dans les bandes hautes/basses vides des panneaux, en verre sombre discret.
+   ========================================================================== */
+.bubble-field { display: none; }
+.bubble {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 12px;
+  /* Verre sombre incrusté (fini le sticker plein qui criait) */
+  background: rgba(28, 15, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 26px -14px rgba(0, 0, 0, 0.55);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  opacity: 0.62;                       /* discret : n'attire pas l'œil */
+  pointer-events: none;
+}
+.bubble svg { width: 15px; height: 15px; }
+.bubble b { font-weight: 800; font-size: 0.86rem; }
+.bubble small { font-weight: 600; font-size: 0.68rem; opacity: 0.6; }
+/* Accents de couleur uniquement sur les icônes/chiffres (pas de fond plein) */
+.b-likes svg      { color: var(--np-rose); }
+.b-comments svg   { color: var(--np-lavender); }
+.b-views svg,
+.b-views b        { color: var(--np-cyan); }
+.b-play svg       { color: var(--np-cyan); }
+.b-hashtag        { color: var(--np-cyan); font-weight: 800; }
+.b-story .bubble-ico svg      { color: var(--np-cyan); }
+.b-followers .bubble-ico.up svg { color: var(--np-cyan); }
+
+.bubble--circle { width: 44px; height: 44px; padding: 0; border-radius: 50%; justify-content: center; }
+.bubble--circle svg { width: 18px; height: 18px; }
+.bubble--card { padding: 8px 12px 8px 9px; }
+.bubble-lines { display: flex; flex-direction: column; line-height: 1.15; }
+.bubble-lines em { font-style: normal; font-weight: 600; font-size: 0.66rem; color: rgba(255,255,255,0.55); }
+.bubble-lines b { font-weight: 800; font-size: 0.82rem; }
+.bubble-ico {
+  display: grid; place-items: center;
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.08);
+}
+.bubble-avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--grad-brand);
+  opacity: 0.8;
+}
+.bubble--tag { padding: 7px 12px; font-size: 0.8rem; }
+
+/* Le contenu reste au-dessus des bulles */
+.contact-inner, .map-radar, .map-caption { position: relative; z-index: 2; }
+
+/* Positions : dans les bandes HAUTE et BASSE des panneaux (là où il n'y a pas
+   de contenu, celui-ci étant centré verticalement) → pas de chevauchement. */
+.contact .b-likes    { top: 3%;    left: 1%; }
+.contact .b-comments { top: 3%;    right: 1%; }
+.contact .b-follow   { bottom: 4%; left: 1%; }
+.contact .b-hashtag  { bottom: 4%; right: 2%; }
+.map-panel .b-views     { top: 3%;    left: 1%; }
+.map-panel .b-play      { top: 4%;    right: 2%; }
+.map-panel .b-story     { bottom: 4%; left: 1%; }
+.map-panel .b-followers { bottom: 4%; right: 1%; }
+
+/* Léger flottement (désactivé si l'utilisateur réduit les animations) */
+@media (prefers-reduced-motion: no-preference) {
+  .bubble { animation: floatY var(--fd, 8s) ease-in-out infinite alternate; animation-delay: var(--pd, 0s); }
+  .b-likes { --fd: 7.5s; } .b-comments { --fd: 8s; } .b-views { --fd: 8.5s; }
+  .b-play { --fd: 7s; } .b-follow { --fd: 9s; } .b-followers { --fd: 8.2s; }
+  .b-story { --fd: 9.5s; } .b-hashtag { --fd: 7.8s; }
+}
+@keyframes floatY { from { transform: translateY(-5px); } to { transform: translateY(6px); } }
+
+/* Affichées UNIQUEMENT quand l'écran est assez grand pour garantir zéro
+   chevauchement (marges hautes/basses + latérales suffisantes). */
+@media (min-width: 1280px) and (min-height: 780px) {
+  .bubble-field { display: block; }
+}
+
+/* ==========================================================================
+   MODALE CALENDLY — le calendrier se charge dans une bulle, sans quitter le site
+   ========================================================================== */
+.cal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 28px);
+  background: rgba(18, 8, 28, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s var(--ease), visibility 0.28s var(--ease);
+}
+.cal-modal.is-open { opacity: 1; visibility: visible; }
+.cal-panel {
+  position: relative;
+  width: min(440px, 100%);
+  height: min(720px, 92vh);
+  border-radius: 20px;
+  overflow: hidden;
+  background: #2f173b;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.7);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.3s var(--ease);
+}
+.cal-modal.is-open .cal-panel { transform: none; }
+.cal-close {
+  position: absolute;
+  top: 10px; right: 10px;
+  z-index: 2;
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border: none; border-radius: 50%;
+  background: rgba(20, 10, 30, 0.7);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.cal-close:hover { background: rgba(20, 10, 30, 0.95); transform: scale(1.05); }
+.cal-close svg { width: 17px; height: 17px; }
+.cal-frame { width: 100%; height: 100%; }
+.cal-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.cal-loading {
+  display: grid; place-items: center; height: 100%;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-head); font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   BULLE SERVICE — petit popover discret (pas de modale plein écran)
+   ========================================================================== */
+.svc-pop {
+  position: fixed;
+  z-index: 400;
+  width: min(340px, calc(100vw - 24px));
+  padding: 20px 22px 22px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(46, 27, 66, 0.98), rgba(32, 18, 48, 0.98));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 22px 60px -18px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(188, 107, 242, 0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  transform-origin: top left;
+  transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+  pointer-events: none;
+}
+.svc-pop.is-open { opacity: 1; transform: none; pointer-events: auto; }
+.svc-pop-close {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border: none; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.svc-pop-close:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.svc-pop-close svg { width: 15px; height: 15px; }
+.svc-pop-body { color: rgba(255, 255, 255, 0.82); }
+.svc-pop-body .svc-eyebrow {
+  font-family: var(--font-head);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  padding-right: 30px;
+}
+.svc-pop-body .svc-eyebrow--com   { color: var(--np-cyan); }
+.svc-pop-body .svc-eyebrow--event { color: var(--np-violet); }
+.svc-pop-body h2 {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin: 0 0 8px;
+  padding-right: 20px;
+}
+.svc-pop-body p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
 }
 .legal-body h2 {
   font-family: var(--font-head);

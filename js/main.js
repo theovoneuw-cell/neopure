@@ -1,12 +1,10 @@
 /* ==========================================================================
    NEOPURE — Interactions de base
-   Menu évolutif (flottant, pas de barre), anneau de progression au scroll,
-   reveal au scroll, année du footer. Léger, sans dépendance.
+   Menu évolutif (flottant, pas de barre), reveal au scroll,
+   année du footer. Léger, sans dépendance.
    ========================================================================== */
 (function () {
   "use strict";
-
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* Verrou de scroll robuste (iOS Safari inclus) : empêche la page de défiler
      DERRIÈRE une modale, tout en autorisant le scroll À L'INTÉRIEUR d'un élément.
@@ -61,21 +59,7 @@
     });
   }
 
-  /* 2. Anneau de progression (évolue avec le scroll) ----------------------- */
-  var root = document.documentElement;
-  var ticking = false;
-  function progress() {
-    var max = root.scrollHeight - root.clientHeight;
-    var p = max > 0 ? (window.scrollY || root.scrollTop) / max : 0;
-    root.style.setProperty("--np-progress", p.toFixed(4));
-    ticking = false;
-  }
-  window.addEventListener("scroll", function () {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(progress); }
-  }, { passive: true });
-  progress();
-
-  /* 3. Reveal au scroll (IntersectionObserver) ----------------------------- */
+  /* 2. Reveal au scroll (IntersectionObserver) ----------------------------- */
   var revealEls = document.querySelectorAll(".reveal");
   // Le reveal au scroll joue même en "réduire les animations" (fondu ponctuel léger).
   if (!("IntersectionObserver" in window)) {
@@ -92,11 +76,11 @@
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
-  /* 4. Année automatique du footer ----------------------------------------- */
+  /* 3. Année automatique du footer ----------------------------------------- */
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* 5. Scroll-spy : surligne la section courante dans le menu évolutif ------ */
+  /* 4. Scroll-spy : surligne la section courante dans le menu évolutif ------ */
   var spyLinks = Array.prototype.slice.call(document.querySelectorAll(".side-nav a"));
   if (spyLinks.length && "IntersectionObserver" in window) {
     var targets = [];
@@ -125,7 +109,7 @@
     targets.forEach(function (t) { spy.observe(t); });
   }
 
-  /* 6. Chips « Nature du message » : sélection unique avec mise à jour du champ caché */
+  /* 5. Chips « Nature du message » : sélection unique avec mise à jour du champ caché */
   (function () {
     var chips = document.querySelectorAll(".field--chips .chip");
     var hidden = document.getElementById("f-nature");
@@ -143,7 +127,7 @@
     });
   })();
 
-  /* 7. Formulaire de contact : confirmation propre (pas de back-end) -------- */
+  /* 6. Formulaire de contact : confirmation propre (pas de back-end) -------- */
   var form = document.querySelector(".contact-form");
   if (form) {
     form.addEventListener("submit", function (e) {
@@ -159,7 +143,7 @@
       ok.setAttribute("role", "status");
       var h = document.createElement("h3");
       var prenom = nom ? nom.value.trim().split(" ")[0] : "";
-      h.textContent = prenom ? "Merci " + prenom + " ! 🎉" : "Merci ! 🎉";
+      h.textContent = prenom ? "Merci " + prenom + " !" : "Merci !";
       var p = document.createElement("p");
       p.textContent = "On a bien reçu ton message. On te recontacte très vite — promis.";
       ok.appendChild(h);
@@ -168,7 +152,7 @@
     });
   }
 
-  /* 8. Lightbox galerie : clic sur une photo/vidéo → plein écran + navigation -- */
+  /* 7. Lightbox galerie : clic sur une photo/vidéo → plein écran + navigation -- */
   (function () {
     var lb = document.getElementById("lightbox");
     var stage = document.getElementById("lbStage");
@@ -252,7 +236,7 @@
     });
   })();
 
-  /* 9. Modale légale : clic sur un lien légal → bulle de lecture ------------- */
+  /* 8. Modale légale : clic sur un lien légal → bulle de lecture ------------- */
   (function () {
     var modal = document.getElementById("legalModal");
     var body = document.getElementById("legalBody");
@@ -293,6 +277,136 @@
     modal.addEventListener("click", function (e) {
       if (e.target === modal) close();
     });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    });
+  })();
+
+  /* 9. Services : petite bulle d'explication (popover discret, pas de modale) - */
+  (function () {
+    var pop = document.getElementById("svcPop");
+    var body = pop && pop.querySelector(".svc-pop-body");
+    var triggers = document.querySelectorAll("[data-svc]");
+    if (!pop || !body || !triggers.length) return;
+
+    var openEl = null;
+
+    function place(anchor) {
+      // Positionne la bulle sous l'élément cliqué, recalée dans l'écran.
+      pop.style.visibility = "hidden";
+      pop.hidden = false;
+      var r = anchor.getBoundingClientRect();
+      var pw = pop.offsetWidth, ph = pop.offsetHeight;
+      var margin = 12;
+      var left = r.left;
+      if (left + pw > window.innerWidth - margin) left = window.innerWidth - pw - margin;
+      if (left < margin) left = margin;
+      var top = r.bottom + 10;
+      if (top + ph > window.innerHeight - margin) {
+        // pas la place en dessous → au-dessus
+        top = r.top - ph - 10;
+        if (top < margin) top = margin;
+      }
+      pop.style.left = Math.round(left) + "px";
+      pop.style.top = Math.round(top) + "px";
+      pop.style.visibility = "";
+    }
+
+    function open(el) {
+      var doc = document.querySelector('[data-svc-doc="' + el.getAttribute("data-svc") + '"]');
+      if (!doc) return;
+      body.innerHTML = doc.innerHTML;
+      pop.hidden = false;
+      place(el);
+      // force le reflow puis anime
+      void pop.offsetWidth;
+      pop.classList.add("is-open");
+      openEl = el;
+      el.setAttribute("aria-expanded", "true");
+    }
+    function close() {
+      if (!openEl) return;
+      pop.classList.remove("is-open");
+      openEl.setAttribute("aria-expanded", "false");
+      openEl = null;
+      setTimeout(function () { if (!openEl) { pop.hidden = true; body.innerHTML = ""; } }, 200);
+    }
+
+    triggers.forEach(function (el) {
+      el.setAttribute("aria-haspopup", "dialog");
+      el.setAttribute("aria-expanded", "false");
+      function trigger(e) {
+        e.stopPropagation();
+        if (openEl === el) { close(); return; }
+        if (openEl) { pop.classList.remove("is-open"); openEl.setAttribute("aria-expanded", "false"); openEl = null; }
+        open(el);
+      }
+      el.addEventListener("click", trigger);
+      el.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); trigger(e); }
+      });
+    });
+
+    // Fermeture : clic ailleurs, Échap, scroll, redimensionnement
+    var closeBtn = pop.querySelector(".svc-pop-close");
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    pop.addEventListener("click", function (e) { e.stopPropagation(); });
+    document.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    window.addEventListener("resize", close);
+    // le scroll du site se fait via .h-viewport (horizontal) et window (vertical)
+    window.addEventListener("scroll", close, true);
+  })();
+
+  /* 10. Modale Calendly : le calendrier se charge dans une bulle (pas de nouvel onglet) */
+  (function () {
+    var CAL_URL = "https://calendly.com/neopurecom/30min";
+    var modal = document.getElementById("calModal");
+    var frame = document.getElementById("calFrame");
+    var closeBtn = document.getElementById("calClose");
+    var triggers = document.querySelectorAll("[data-calendly]");
+    if (!modal || !frame || !triggers.length) return;
+
+    var lock = makeScrollLock();
+    var loaded = false;
+
+    function buildUrl() {
+      // Thème Calendly aux couleurs de la charte (hex sans #)
+      var params = "hide_gdpr_banner=1&background_color=2f173b&text_color=ffffff&primary_color=b92afa";
+      return CAL_URL + (CAL_URL.indexOf("?") > -1 ? "&" : "?") + params;
+    }
+    function open() {
+      if (!loaded) {
+        frame.innerHTML = '<div class="cal-loading">Chargement du calendrier…</div>';
+        var ifr = document.createElement("iframe");
+        ifr.src = buildUrl();
+        ifr.title = "Calendly — réserver un appel";
+        ifr.setAttribute("frameborder", "0");
+        ifr.addEventListener("load", function () {
+          var l = frame.querySelector(".cal-loading");
+          if (l) l.remove();
+        });
+        frame.appendChild(ifr);
+        loaded = true;
+      }
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      lock.lock(frame);
+    }
+    function close() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      lock.unlock();
+    }
+
+    triggers.forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();      // pas de nouvel onglet : on ouvre la modale
+        open();
+      });
+    });
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    modal.addEventListener("click", function (e) { if (e.target === modal) close(); });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && modal.classList.contains("is-open")) close();
     });

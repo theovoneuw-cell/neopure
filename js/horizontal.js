@@ -30,25 +30,10 @@
 
   function onScroll() { target = clamp(window.scrollY); }
 
-  /* Effet 3D "coverflow" : chaque panneau pivote selon sa distance au centre */
-  function apply3D() {
-    var cx = window.innerWidth / 2;
-    for (var i = 0; i < panels.length; i++) {
-      var p = panels[i];
-      var r = p.getBoundingClientRect();
-      var dist = (r.left + r.width / 2 - cx) / window.innerWidth;
-      var k = Math.max(-1, Math.min(1, dist));
-      var rot = (-k * 6).toFixed(2);               // rotation Y plus douce (±6°)
-      var tz = (-Math.abs(k) * 55).toFixed(0);     // recul réduit → moins de chevauchement
-      p.style.transform = "rotateY(" + rot + "deg) translateZ(" + tz + "px)";
-    }
-  }
-
   function loop() {
     current += (target - current) * 0.09;
     if (Math.abs(target - current) < 0.06) current = target;
     track.style.transform = "translate3d(" + (-current).toFixed(2) + "px,0,0)";
-    apply3D();
     rafId = window.requestAnimationFrame(loop);
   }
 
