@@ -237,7 +237,10 @@ ul { margin: 0; padding: 0; list-style: none; }
      baverait en gris derrière les lettres. Le drop-shadow (qui épouse la forme
      des glyphes) porte tout le relief à lui seul. */
   text-shadow: none;
-  filter: drop-shadow(0 1px 8px rgba(15, 5, 26, 0.28));
+  /* Ombre SYMÉTRIQUE (pas de décalage vertical) : un décalage de 1px projetait
+     une frange sombre sous les traits diagonaux (jambe du « R ») qui, sur le fond
+     clair, apparaissait comme une fêlure. Halo doux centré = relief sans couture. */
+  filter: drop-shadow(0 0 7px rgba(15, 5, 26, 0.22));
   animation: headingSheen 7.5s ease-in-out infinite;
 }
 @keyframes headingSheen {
