@@ -1701,6 +1701,10 @@ section { position: relative; }
 .field input, .field textarea {
   font-family: var(--font-body);
   font-size: 1rem;
+  /* line-height serrée : le 1.6 hérité du body dépassait la hauteur utile du
+     champ (min-height - padding) et décalait le texte vers le haut sur iOS.
+     1.2 tient dans la boîte → le texte se centre verticalement proprement. */
+  line-height: 1.2;
   padding: 13px 15px;
   border: 1px solid var(--np-line);
   border-radius: var(--r-sm);
@@ -1709,7 +1713,7 @@ section { position: relative; }
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
   min-height: 48px;
 }
-.field textarea { resize: vertical; min-height: 110px; }
+.field textarea { resize: vertical; min-height: 110px; line-height: 1.5; }
 .field input:focus, .field textarea:focus {
   outline: none;
   border-color: var(--np-purple);
