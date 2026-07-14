@@ -8,6 +8,14 @@ module.exports = function (eleventyConfig) {
     function (p) { eleventyConfig.addPassthroughCopy(p); }
   );
 
+  // Pages CMS enregistre les chemins médias avec un « / » de tête
+  // (/assets/clients/x.png). Le site étant servi sous /neopure/ (project page
+  // GitHub Pages), un chemin absolu casse les images → on normalise en chemin
+  // relatif quel que soit le format saisi.
+  eleventyConfig.addFilter("rel", function (p) {
+    return typeof p === "string" ? p.replace(/^\/+/, "") : p;
+  });
+
   return {
     dir: { input: "src", output: "_site", data: "_data" },
     htmlTemplateEngine: "njk",

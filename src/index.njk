@@ -423,11 +423,11 @@
             <div class="collab-marquee" aria-label="Nos clients">
               <ul class="collab-track">
                 {%- for c in clients %}
-                <li class="collab-card"><img src="{{ c.src }}" alt="{{ c.alt }}" loading="lazy"></li>
+                <li class="collab-card"><img src="{{ c.src | rel }}" alt="{{ c.alt }}" loading="lazy"></li>
                 {%- endfor %}
                 <!-- Duplication pour boucle infinie en desktop (cachée en mobile) -->
                 {%- for c in clients %}
-                <li class="collab-card collab-card--dup" aria-hidden="true"><img src="{{ c.src }}" alt="" loading="lazy"></li>
+                <li class="collab-card collab-card--dup" aria-hidden="true"><img src="{{ c.src | rel }}" alt="" loading="lazy"></li>
                 {%- endfor %}
               </ul>
             </div>
@@ -459,11 +459,11 @@
           {%- for m in gallery %}
           {%- if m.type == "video" %}
           <figure class="gallery-item is-video g-vid reveal"{% if m.delay %} data-delay="{{ m.delay }}"{% endif %}>
-            <video src="{{ m.src }}" poster="{{ m.poster }}" autoplay muted loop playsinline preload="metadata"></video>
+            <video src="{{ m.src | rel }}" poster="{{ m.poster | rel }}" autoplay muted loop playsinline preload="metadata"></video>
             <span class="media-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
           </figure>
           {%- else %}
-          <figure class="gallery-item{% if m.variant %} g-{{ m.variant }}{% endif %} reveal"{% if m.delay %} data-delay="{{ m.delay }}"{% endif %}><img src="{{ m.src }}" alt="{{ m.alt }}" loading="lazy"></figure>
+          <figure class="gallery-item{% if m.variant %} g-{{ m.variant }}{% endif %} reveal"{% if m.delay %} data-delay="{{ m.delay }}"{% endif %}><img src="{{ m.src | rel }}" alt="{{ m.alt }}" loading="lazy"></figure>
           {%- endif %}
           {%- endfor %}
         </div>
