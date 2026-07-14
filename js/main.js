@@ -194,7 +194,10 @@
           return { ok: r.ok, data: data };
         }); })
         .then(function (res) {
-          if (res.ok) {
+          // Formsubmit peut répondre HTTP 200 avec success:"false" (ex. :
+          // formulaire non activé) → le message n'est PAS délivré, il ne faut
+          // pas afficher le « Merci ! » dans ce cas.
+          if (res.ok && String(res.data.success) !== "false") {
             showSuccess(nomVal);
           } else {
             throw new Error("bad response");
