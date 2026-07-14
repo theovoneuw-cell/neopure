@@ -127,28 +127,86 @@
     });
   })();
 
-  /* 6. Formulaire de contact : confirmation propre (pas de back-end) -------- */
+  /* 6. Formulaire de contact : envoi réel via Formsubmit.co (AJAX) ---------- */
+  /* On garde la validation + le message de succès maison, mais on POST vraiment
+     le message pour qu'il arrive dans la boîte du client. L'attribut `action`
+     du <form> sert de repli si ce JS ne s'exécute pas. */
   var form = document.querySelector(".contact-form");
   if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var nom = form.querySelector("#f-nom");
-      var email = form.querySelector("#f-email");
-      if (nom && !nom.value.trim()) { nom.focus(); return; }
-      if (email && (!email.value.trim() || (email.validity && email.validity.typeMismatch))) {
-        email.focus(); return;
-      }
+    var errBox = form.querySelector("#formError");
+
+    function showError(msg) {
+      if (!errBox) return;
+      errBox.innerHTML = msg;
+      errBox.hidden = false;
+    }
+    function clearError() {
+      if (errBox) { errBox.hidden = true; errBox.textContent = ""; }
+    }
+
+    function showSuccess(nom) {
       var ok = document.createElement("div");
       ok.className = "form-success";
       ok.setAttribute("role", "status");
       var h = document.createElement("h3");
-      var prenom = nom ? nom.value.trim().split(" ")[0] : "";
+      var prenom = nom ? nom.trim().split(" ")[0] : "";
       h.textContent = prenom ? "Merci " + prenom + " !" : "Merci !";
       var p = document.createElement("p");
       p.textContent = "On a bien reçu ton message. On te recontacte très vite — promis.";
       ok.appendChild(h);
       ok.appendChild(p);
       form.replaceWith(ok);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearError();
+
+      var nom = form.querySelector("#f-nom");
+      var email = form.querySelector("#f-email");
+      var consent = form.querySelector("#f-consent");
+
+      if (nom && !nom.value.trim()) { nom.focus(); return; }
+      if (email && (!email.value.trim() || (email.validity && email.validity.typeMismatch))) {
+        email.focus(); return;
+      }
+      if (consent && !consent.checked) {
+        showError("Merci de cocher la case pour qu'on puisse te recontacter.");
+        consent.focus();
+        return;
+      }
+
+      var btn = form.querySelector('button[type="submit"]');
+      var nomVal = nom ? nom.value : "";
+      if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = "Envoi…"; }
+
+      // Endpoint AJAX de Formsubmit : renvoie du JSON et autorise le CORS.
+      var endpoint = form.getAttribute("action").replace(
+        "formsubmit.co/", "formsubmit.co/ajax/"
+      );
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (data) {
+          return { ok: r.ok, data: data };
+        }); })
+        .then(function (res) {
+          if (res.ok) {
+            showSuccess(nomVal);
+          } else {
+            throw new Error("bad response");
+          }
+        })
+        .catch(function () {
+          if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || "Envoyer"; }
+          showError(
+            "Oups, l'envoi n'a pas abouti. Réessaie, ou écris-nous directement à " +
+            '<a href="mailto:neopurecom@gmail.com">neopurecom@gmail.com</a>.'
+          );
+        });
     });
   }
 

@@ -1758,6 +1758,45 @@ section { position: relative; }
 .contact-form .btn { align-self: flex-start; margin-top: 4px; }
 .form-note { font-size: 0.8rem; color: var(--np-muted); margin: 4px 0 0; }
 
+/* Honeypot anti-spam : invisible et hors flux, mais rempli par les bots */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Case de consentement RGPD */
+.field--consent { margin-top: 2px; }
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--np-muted);
+  cursor: pointer;
+}
+.consent input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 18px; height: 18px;
+  margin-top: 1px;
+  accent-color: var(--np-purple);
+  cursor: pointer;
+}
+.consent a { color: var(--np-purple); text-decoration: underline; }
+
+/* Message d'erreur d'envoi (réseau ou consentement manquant) */
+.form-error {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e0417a;
+}
+.form-error a { color: inherit; text-decoration: underline; }
+
 /* Chips de sélection pour « Nature du message » */
 .field--chips .chips {
   display: flex;
@@ -2816,6 +2855,10 @@ body { background: transparent; color: var(--np-white); }
   box-shadow: 0 0 0 3px rgba(53, 242, 242, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 .form-note { color: rgba(255, 255, 255, 0.68); }
+/* Consentement + erreur : lisibles sur le fond sombre du formulaire */
+.consent { color: rgba(255, 255, 255, 0.82); }
+.consent a { color: var(--np-cyan); }
+.form-error { color: #ff8fb0; }
 
 /* En-tête : verre sombre une fois scrollé */
 .site-header.is-scrolled {

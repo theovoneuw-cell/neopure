@@ -64,7 +64,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260714b" />
+  <link rel="stylesheet" href="css/style.css?v=20260714c" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -596,7 +596,23 @@
       <div class="container contact-inner">
         <div class="contact-form-wrap reveal">
           <h2 class="contact-title gradient-text">Contacte-nous !</h2>
-          <form class="contact-form" action="#" method="post" novalidate>
+          <!-- Envoi via Formsubmit.co (gratuit, sans serveur) : les messages
+               arrivent directement dans la boîte neopurecom@gmail.com.
+               ACTIVATION : au tout premier envoi, Formsubmit envoie un mail de
+               confirmation dans cette boîte → cliquer le lien une fois pour
+               activer. (L'e-mail est déjà public sur la page — mailto + JSON-LD ;
+               on peut ensuite remplacer par le token aléatoire fourni par
+               Formsubmit si on veut le masquer du code source.)
+               Le JS intercepte pour un envoi AJAX + message de succès maison ;
+               l'attribut action reste un repli fonctionnel si le JS est coupé. -->
+          <form class="contact-form" action="https://formsubmit.co/neopurecom@gmail.com" method="post" novalidate>
+            <!-- Réglages Formsubmit -->
+            <input type="hidden" name="_subject" value="Nouveau message depuis le site Neopure" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="https://theovoneuw-cell.github.io/neopure-site/#contact" />
+            <!-- Honeypot anti-spam : un bot remplit ce champ, un humain ne le voit pas -->
+            <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <div class="field">
               <label for="f-nom">Nom <span aria-hidden="true">*</span></label>
               <input type="text" id="f-nom" name="nom" autocomplete="name" required placeholder="Ton nom" />
@@ -628,6 +644,13 @@
               <label for="f-msg">Ton message</label>
               <textarea id="f-msg" name="message" rows="4" placeholder="Parle-nous de ton projet..."></textarea>
             </div>
+            <div class="field field--consent">
+              <label class="consent">
+                <input type="checkbox" id="f-consent" name="consentement" value="oui" required />
+                <span>J'accepte d'être recontacté·e au sujet de ma demande. <a href="#" data-legal="privacy">Politique de confidentialité</a>.</span>
+              </label>
+            </div>
+            <p class="form-error" id="formError" role="alert" hidden></p>
             <button type="submit" class="btn btn-primary">Envoyer</button>
             <p class="form-note">On te répond sous 24 à 48h. Tes infos restent entre nous.</p>
           </form>
@@ -919,7 +942,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
-  <script src="js/main.js?v=20260712a" defer></script>
+  <script src="js/main.js?v=20260714c" defer></script>
   <script src="js/horizontal.js?v=20260712a" defer></script>
   <script src="js/experience.js?v=20260712a" defer></script>
 </body>
