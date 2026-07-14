@@ -1169,6 +1169,18 @@ section { position: relative; }
   color: rgba(255, 255, 255, 0.72);
 }
 
+/* Clin d'œil auto-référentiel : le site lui-même est la démo du service web/appli.
+   Ligne discrète sous l'accroche, mot « ce site » en accent cyan de la charte. */
+.gallery-selfnote {
+  text-align: center;
+  margin: -16px auto 40px;              /* se tucke sous l'accroche, comme l'accroche sous le titre */
+  font-family: var(--font-head);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.6);
+}
+.gallery-selfnote b { color: var(--np-cyan); font-weight: 700; }
+
 /* Indice de swipe (mobile uniquement) : la rangée contient bien plus de médias
    que l'écran n'en montre — sans indice, on croit qu'il n'y a que 2 vidéos. */
 .gallery-swipe {
@@ -2530,6 +2542,8 @@ section { position: relative; }
   }
   /* Retour client (desktop) : « Stop aux contenus sans fonds. » passe à la ligne */
   .h-active .gallery-section .gallery-heading-strong { display: block; }
+  /* Clin d'œil « ce site c'est nous » : aligné à gauche comme le titre/accroche en frise */
+  .h-active .gallery-section .gallery-selfnote { margin: 0; align-self: flex-start; text-align: left; }
   .h-active .gallery-section .gallery {
     display: flex;
     align-items: center;
