@@ -76,12 +76,12 @@ par :
 
 Astuce : pour forcer tous les logos en blanc (look monochrome premium), ajoute `class="collab-list collab-list--mono"` sur le `<ul>`.
 
-### Brancher le formulaire à un back-end
+### Formulaire de contact (envoi d'e-mails)
 
-Le formulaire affiche un message de confirmation en JS quand on l'envoie (pas de back-end pour l'instant). Pour le brancher à un service d'envoi d'email (Formspree, EmailJS, etc.) :
+Le formulaire envoie réellement les messages vers `neopurecom@gmail.com`, sans serveur, avec deux services en cascade (`js/main.js`, section « Formulaire de contact ») :
 
-- Mets l'URL du service dans `action="…"` du `<form class="contact-form">` (`index.html`)
-- Retire ou adapte le `e.preventDefault()` dans `js/main.js` (section « Formulaire de contact »)
+1. **Web3Forms** (principal) — gratuit, ~250 envois/mois. La clé publique se colle dans l'attribut `data-w3f-key` du `<form class="contact-form">` (`src/index.njk`). Pour l'obtenir : [web3forms.com](https://web3forms.com) → entrer `neopurecom@gmail.com` → la clé arrive dans cette boîte mail.
+2. **Formsubmit.co** (repli automatique) — utilisé si Web3Forms échoue ou tant que la clé est vide. C'est l'`action` du `<form>`, qui sert aussi de repli sans JavaScript.
 
 ## Couleurs de marque
 

@@ -127,10 +127,13 @@
     });
   })();
 
-  /* 6. Formulaire de contact : envoi réel via Formsubmit.co (AJAX) ---------- */
-  /* On garde la validation + le message de succès maison, mais on POST vraiment
-     le message pour qu'il arrive dans la boîte du client. L'attribut `action`
-     du <form> sert de repli si ce JS ne s'exécute pas. */
+  /* 6. Formulaire de contact : envoi via Web3Forms, repli Formsubmit -------- */
+  /* Formsubmit (ancien service unique) tombait régulièrement en panne côté
+     serveur → envois perdus chez le client. Le principal est désormais
+     Web3Forms (gratuit, clé publique lue sur data-w3f-key du <form>). Si
+     Web3Forms échoue — ou tant que la clé n'est pas renseignée — on retente
+     automatiquement via Formsubmit. L'attribut `action` du <form> reste le
+     repli ultime si ce JS ne s'exécute pas. */
   var form = document.querySelector(".contact-form");
   if (form) {
     var errBox = form.querySelector("#formError");
@@ -158,6 +161,47 @@
       form.replaceWith(ok);
     }
 
+    /* Envoi n°1 : Web3Forms. Payload construit à la main : les champs
+       techniques Formsubmit (_subject, _captcha, _next…) n'ont rien à faire
+       dans l'e-mail reçu. Le champ `email` sert automatiquement de Reply-To. */
+    function sendViaWeb3Forms(key) {
+      var fd = new FormData();
+      fd.append("access_key", key);
+      fd.append("subject", "Nouveau message depuis le site Neopure");
+      fd.append("from_name", "Site Neopure");
+      ["nom", "email", "telephone", "nature", "message"].forEach(function (n) {
+        var el = form.querySelector('[name="' + n + '"]');
+        if (el && el.value) fd.append(n, el.value);
+      });
+      var consent = form.querySelector("#f-consent");
+      fd.append("consentement", consent && consent.checked ? "oui" : "non");
+      return fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: fd
+      }).then(function (r) { return r.json(); }).then(function (data) {
+        if (!data.success) throw new Error("web3forms refused");
+      });
+    }
+
+    /* Envoi n°2 (repli) : endpoint AJAX de Formsubmit, comme avant. */
+    function sendViaFormsubmit() {
+      var endpoint = form.getAttribute("action").replace(
+        "formsubmit.co/", "formsubmit.co/ajax/"
+      );
+      return fetch(endpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (data) {
+          // Formsubmit peut répondre HTTP 200 avec success:"false" (ex. :
+          // formulaire non activé) → le message n'est PAS délivré.
+          if (!r.ok || String(data.success) === "false") throw new Error("formsubmit refused");
+        });
+      });
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       clearError();
@@ -176,33 +220,20 @@
         return;
       }
 
-      var btn = form.querySelector('button[type="submit"]');
       var nomVal = nom ? nom.value : "";
+
+      // Honeypot : un bot a rempli le champ invisible → on n'envoie rien.
+      var honey = form.querySelector('[name="_honey"]');
+      if (honey && honey.value) { showSuccess(nomVal); return; }
+
+      var btn = form.querySelector('button[type="submit"]');
       if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = "Envoi…"; }
 
-      // Endpoint AJAX de Formsubmit : renvoie du JSON et autorise le CORS.
-      var endpoint = form.getAttribute("action").replace(
-        "formsubmit.co/", "formsubmit.co/ajax/"
-      );
+      var key = form.getAttribute("data-w3f-key") || "";
 
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: new FormData(form)
-      })
-        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (data) {
-          return { ok: r.ok, data: data };
-        }); })
-        .then(function (res) {
-          // Formsubmit peut répondre HTTP 200 avec success:"false" (ex. :
-          // formulaire non activé) → le message n'est PAS délivré, il ne faut
-          // pas afficher le « Merci ! » dans ce cas.
-          if (res.ok && String(res.data.success) !== "false") {
-            showSuccess(nomVal);
-          } else {
-            throw new Error("bad response");
-          }
-        })
+      (key ? sendViaWeb3Forms(key) : Promise.reject(new Error("no key")))
+        .catch(function () { return sendViaFormsubmit(); })
+        .then(function () { showSuccess(nomVal); })
         .catch(function () {
           if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || "Envoyer"; }
           showError(

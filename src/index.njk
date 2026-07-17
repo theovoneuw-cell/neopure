@@ -559,16 +559,17 @@
       <div class="container contact-inner">
         <div class="contact-form-wrap reveal">
           <h2 class="contact-title gradient-text">Contacte-nous !</h2>
-          <!-- Envoi via Formsubmit.co (gratuit, sans serveur) : les messages
-               arrivent directement dans la boîte neopurecom@gmail.com.
-               ACTIVATION : au tout premier envoi, Formsubmit envoie un mail de
-               confirmation dans cette boîte → cliquer le lien une fois pour
-               activer. (L'e-mail est déjà public sur la page — mailto + JSON-LD ;
-               on peut ensuite remplacer par le token aléatoire fourni par
-               Formsubmit si on veut le masquer du code source.)
-               Le JS intercepte pour un envoi AJAX + message de succès maison ;
-               l'attribut action reste un repli fonctionnel si le JS est coupé. -->
-          <form class="contact-form" action="https://formsubmit.co/neopurecom@gmail.com" method="post" novalidate>
+          <!-- Envoi principal via Web3Forms (gratuit, sans serveur, fiable) :
+               le JS lit la clé publique dans data-w3f-key et POST en AJAX vers
+               api.web3forms.com → le message arrive dans neopurecom@gmail.com.
+               OBTENIR LA CLÉ : https://web3forms.com → entrer neopurecom@gmail.com
+               → la clé arrive dans cette boîte (le client la transfère) → la
+               coller ici. La clé est publique par conception, pas un secret.
+               REPLI : tant que la clé est vide, ou si Web3Forms échoue, le JS
+               retente via Formsubmit.co (ancien service, parfois en panne) ;
+               l'attribut action reste le repli ultime si le JS est coupé.
+               (Formsubmit avait été activé par clic dans la boîte du client.) -->
+          <form class="contact-form" data-w3f-key="" action="https://formsubmit.co/neopurecom@gmail.com" method="post" novalidate>
             <!-- Réglages Formsubmit -->
             <input type="hidden" name="_subject" value="Nouveau message depuis le site Neopure" />
             <input type="hidden" name="_template" value="table" />
@@ -898,7 +899,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
-  <script src="js/main.js?v=20260714d" defer></script>
+  <script src="js/main.js?v=20260717a" defer></script>
   <script src="js/horizontal.js?v=20260712a" defer></script>
   <script src="js/experience.js?v=20260712a" defer></script>
 
