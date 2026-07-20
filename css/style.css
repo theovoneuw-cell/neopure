@@ -2667,8 +2667,6 @@ section { position: relative; }
   .h-active .contact .contact-inner {
     overflow-y: auto;
     overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
   }
   .h-active .contact .contact-form-wrap { width: 420px; }
   /* La carte Horaires (courte) se centre verticalement par rapport au
@@ -3310,8 +3308,6 @@ body { background: transparent; color: var(--np-white); }
   overflow-wrap: anywhere;
   padding: clamp(34px, 5vw, 52px) clamp(26px, 5vw, 48px) clamp(30px, 5vw, 46px);
   color: rgba(255, 255, 255, 0.84);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(188, 107, 242, 0.5) transparent;
 }
 /* Alignement à gauche FORCÉ : neutralise toute justification externe
    (extension navigateur, mode lecture, leaflet…) qui étirait les espaces. */
@@ -3324,8 +3320,6 @@ body { background: transparent; color: var(--np-white); }
   text-align: left !important;
   text-justify: auto;
 }
-.legal-body::-webkit-scrollbar { width: 8px; }
-.legal-body::-webkit-scrollbar-thumb { background: rgba(188, 107, 242, 0.45); border-radius: 8px; }
 /* Confort de lecture : on borne la longueur de ligne */
 .legal-body > * { max-width: 60ch; }
 
@@ -3964,4 +3958,28 @@ html.np-reveal .hero-inner {
   .np-loader.is-done .np-brand-box { animation: npFadeOut 0.3s linear forwards; }
   .np-loader.is-done .np-loader-count { animation: npFadeOut 0.3s linear forwards; }
   html.np-reveal .hero-inner { animation: none; }
+}
+
+/* ============================================================
+   BARRES DE DÉFILEMENT MASQUÉES — PARTOUT, TOUS SYSTÈMES
+   ============================================================
+   macOS n'affiche les barres en overlay (invisibles au trackpad) que si
+   « Réglages Système > Apparence > Afficher les barres de défilement » est
+   sur « Automatiquement ». Réglé sur « Toujours » (ou avec une souris à
+   molette branchée), la barre devient permanente et prend de la place :
+   elle apparaissait sur le formulaire de contact en mode frise et dans les
+   panneaux légaux. Windows/Linux l'affichent en permanence par défaut.
+   On la masque donc globalement — le défilement, lui, reste actif (molette,
+   trackpad, tactile, clavier, glisser). À garder en fin de fichier : toute
+   règle qui redemanderait `scrollbar-width: thin` ou styliserait
+   ::-webkit-scrollbar sur un sélecteur de classe l'emporterait par
+   spécificité, donc ne pas en réintroduire. */
+* {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* anciens Edge / IE */
+}
+*::-webkit-scrollbar {            /* Chrome, Safari, Edge, navigateurs iOS */
+  width: 0;
+  height: 0;
+  display: none;
 }
