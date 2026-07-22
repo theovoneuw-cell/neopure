@@ -53,16 +53,15 @@
   <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Bold.otf" crossorigin />
   <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Light.otf" crossorigin />
   <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Black.otf" crossorigin />
-  <!-- La carte (Leaflet + tuiles CartoDB) part plus vite avec la connexion déjà ouverte -->
-  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <!-- Les tuiles de la carte viennent de CartoDB : on ouvre la connexion tôt.
+       (La lib Leaflet est désormais auto-hébergée → plus de dépendance unpkg.) -->
   <link rel="preconnect" href="https://a.basemaps.cartocdn.com" />
 
-  <!-- ============ Carte (Leaflet) ============ -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- ============ Carte (Leaflet, auto-hébergé) ============ -->
+  <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260722a" />
+  <link rel="stylesheet" href="css/style.css?v=20260722b" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -72,16 +71,17 @@
     "name": "Neopure",
     "description": "Agence de communication & événementiel à Montpellier. La Com' : réseaux sociaux, création de contenus, stratégie digitale, création de sites web & d'applications. L'Event : coordination, DJ, photo & vidéo, team building, communication évènementielle.",
     "url": "https://neopure-studio.fr/",
-    "image": "https://neopure-studio.fr/assets/brand/LOGO.png",
+    "image": "https://neopure-studio.fr/assets/brand/og-neopure-com.png",
+    "logo": "https://neopure-studio.fr/assets/brand/Logo_N_Degrade_SF.png",
     "telephone": "+33611670705",
     "email": "neopurecom@gmail.com",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Promenade du Peyrou",
       "addressLocality": "Montpellier",
-      "postalCode": "34000",
+      "addressRegion": "Occitanie",
       "addressCountry": "FR"
     },
+    "areaServed": "Montpellier et alentours",
     "sameAs": ["https://www.instagram.com/neopure_com/"],
     "priceRange": "€€"
   }
@@ -893,10 +893,10 @@
       Adresse : Montpellier, France.<br />
       E-mail : <a href="mailto:neopurecom@gmail.com">neopurecom@gmail.com</a><br />
       Téléphone : <a href="tel:+33611670705">+33 6 11 67 07 05</a><br />
-      SIRET : 840&nbsp;627&nbsp;947&nbsp;00012 — Entrepreneur individuel.</p>
+      SIRET : <span class="legal-siret">840 627 947 00012</span> — Entrepreneur individuel.</p>
 
       <h3>Directeur de la publication</h3>
-      <p>Le représentant légal de Neopure.</p>
+      <p>Axel Bertrand.</p>
 
       <h3>Hébergement</h3>
       <p>Le site est hébergé par GitHub Pages — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.</p>
@@ -930,9 +930,10 @@
 
   </div>
 
-  <!-- Leaflet (carte) -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <!-- Leaflet (carte) — auto-hébergé (assets/vendor/leaflet), plus de CDN unpkg.
+       Seules les tuiles restent externes (CartoDB) ; si elles échouent, le radar
+       CSS reste affiché et le script sort proprement (garde `typeof L`). -->
+  <script src="assets/vendor/leaflet/leaflet.js" defer></script>
 
   <script src="js/main.js?v=20260722a" defer></script>
   <script src="js/horizontal.js?v=20260712a" defer></script>

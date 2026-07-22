@@ -20,8 +20,9 @@ node_modules/
 # Sortie du build Eleventy (générée, non versionnée)
 _site/
 
-# Fichiers de travail / backups
+# Fichiers de travail / backups (couvre aussi *.bak-avant-xxx)
 *.bak
+*.bak-*
 *.tmp
 ~$*
 

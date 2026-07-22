@@ -3508,6 +3508,12 @@ body { background: transparent; color: var(--np-white); }
 /* Confort de lecture : on borne la longueur de ligne */
 .legal-body > * { max-width: 60ch; }
 
+/* Numéro SIRET insécable : le `.legal-body` a `overflow-wrap: anywhere`, qui
+   sinon casse « 840 627 947 00012 » n'importe où (chiffres éparpillés sur
+   plusieurs lignes). On force le numéro à rester d'un seul bloc ; « Entrepreneur
+   individuel » qui suit peut, lui, passer à la ligne normalement. */
+.legal-body .legal-siret { white-space: nowrap; overflow-wrap: normal; }
+
 .legal-eyebrow {
   font-family: var(--font-head);
   font-size: 0.72rem;
