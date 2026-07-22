@@ -211,8 +211,11 @@
         '<h3 class="fs-title">' +
           (safe ? 'Merci <span class="fs-name">' + safe + "</span> !" : "Merci !") +
         "</h3>" +
-        '<p class="fs-text">On a bien reçu ton message.<br>On te recontacte sous ' +
-          "<b>24 à 48 h</b> — promis.</p>";
+        '<p class="fs-text">On a bien reçu ton message.<br>On te recontacte très vite — promis.</p>';
+      // On centre la confirmation dans le panneau (voir .is-sent en CSS) ; la
+      // carte Horaires reste visible à côté.
+      var inner = form.closest ? form.closest(".contact-inner") : null;
+      if (inner) inner.classList.add("is-sent");
       form.replaceWith(ok);
       // On pose le focus sur le bloc : le lecteur d'écran annonce la confirmation.
       if (ok.focus) { try { ok.focus(); } catch (e) {} }

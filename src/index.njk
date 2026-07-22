@@ -61,7 +61,7 @@
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260722c" />
+  <link rel="stylesheet" href="css/style.css?v=20260722za" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -538,37 +538,36 @@
          « qui on est / ce qu'on fait » et « comment nous joindre ». -->
     <section class="team panel panel--deep panel--deep-start" id="equipe" aria-label="L'équipe Neopure">
       <span class="n-float n-float--d" aria-hidden="true"></span>
-      <div class="container team-inner">
-        <div class="team-visual reveal">
-          <p class="team-kicker">Les visages derrière vos projets</p>
-          <!-- Têtes détourées qui flottent doucement (demande client). Les PNG
-               sont recadrés sur la silhouette, halo blanc du détourage retiré ;
-               le bas est estompé en CSS pour masquer la coupe droite. -->
-          <div class="team-heads">
-            <figure class="team-head team-head--a">
-              <img src="assets/team/charlene-v3.png" alt="Charlène" width="466" height="531" decoding="async" />
-              <figcaption>Charlène</figcaption>
-            </figure>
-            <figure class="team-head team-head--b">
-              <img src="assets/team/axel-v3.png" alt="Axel" width="317" height="427" decoding="async" />
-              <figcaption>Axel</figcaption>
-            </figure>
+      <div class="container team-wrap">
+      <header class="team-content team-intro reveal">
+        <p class="eyebrow">Neopure Team</p>
+        <h2>On bosse <span class="gradient-text">main dans la main</span> avec nos clients.</h2>
+        <p class="team-lead">{{ site.teamLead | safe }}</p>
+      </header>
+
+      <div class="team-cards">
+        {%- for m in site.teamMembers %}
+        <article class="team-card {{ 'team-card--com' if loop.first else 'team-card--event' }} reveal"{% if not loop.first %} data-delay="1"{% endif %}>
+          <span class="team-card-ghost" aria-hidden="true">{{ m.name }}</span>
+          <div class="team-card-photo"><img src="{{ m.photo }}" alt="{{ m.name }}" decoding="async" /></div>
+          <div class="team-card-body">
+            <span class="team-card-idx" aria-hidden="true">0{{ loop.index }}</span>
+            <h3 class="team-card-name">{{ m.name }}</h3>
+            <p class="team-card-role">{{ m.role | safe }}</p>
+            <p class="team-card-desc">{{ m.desc | safe }}</p>
           </div>
-        </div>
-
-        <div class="team-content reveal" data-delay="1">
-          <p class="eyebrow">Neopure Team</p>
-          <h2>On bosse <span class="gradient-text">main dans la main</span> avec nos clients.</h2>
-
-          {%- for p in site.teamParagraphs %}
-          <p>{{ p | safe }}</p>
-          {%- endfor %}
-        </div>
+        </article>
+        {%- endfor %}
       </div>
-    </section>
+
+      <p class="team-outro reveal">{{ site.teamOutro | safe }}</p>
+    </div>
+  </section>
 
     <!-- ====================== CONTACT ====================== -->
     <section class="contact panel panel--deep" id="contact" aria-label="Nous contacter">
+      <span class="deco-pill deco-pill--a" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg><b>+800%</b> <span>de vues</span></span>
+      <span class="deco-pill deco-pill--d" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg><b>&times;12</b> <span>d'engagement</span></span>
       <span class="n-float n-float--c" aria-hidden="true"></span>
 
       <!-- Bulles d'engagement retirées ici (retour client : elles passaient
@@ -681,6 +680,8 @@
 
     <!-- ====================== CARTE RADAR ====================== -->
     <section class="map-panel panel panel--deep" id="localisation" aria-label="Où nous trouver">
+      <span class="deco-pill deco-pill--b" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg><b>4&#8239;210</b> <span>vues de story</span></span>
+      <span class="deco-pill deco-pill--c" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg><b>+35K</b> <span>abonnés</span></span>
 
       <!-- Bulles d'engagement retirées (retour client : ces petites cartes
            flottantes, positionnées en %, finissaient toujours par chevaucher
@@ -727,6 +728,7 @@
 
   <!-- ====================== FOOTER ====================== -->
   <footer class="site-footer panel panel--deep">
+    <span class="deco-pill deco-pill--e" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg><b>+1,2M</b> <span>impressions</span></span>
     <div class="container footer-inner">
       <div class="footer-brand">
         <a href="#top" class="brand">
@@ -935,7 +937,7 @@
        CSS reste affiché et le script sort proprement (garde `typeof L`). -->
   <script src="assets/vendor/leaflet/leaflet.js" defer></script>
 
-  <script src="js/main.js?v=20260722b" defer></script>
+  <script src="js/main.js?v=20260722d" defer></script>
   <script src="js/horizontal.js?v=20260712a" defer></script>
   <script src="js/experience.js?v=20260712a" defer></script>
 

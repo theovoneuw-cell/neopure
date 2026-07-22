@@ -851,6 +851,54 @@ section { position: relative; }
   .n-float { opacity: 0.045; }
   .n-float--b, .n-float--c { display: none; }
 }
+/* Sur le fond violet sombre, le « N » dégradé (qui contient du cyan clair)
+   ressort plus que sur l'ancien cyan → on l'atténue dans ces sections. */
+.panel--deep .n-float { opacity: 0.015; }
+
+/* ===== Décorations « engagement » (pastilles stats cyan) =====================
+   Petites stats flottantes dans les zones VIDES des sections violettes. Le cyan
+   ressort sur le violet. DESKTOP uniquement (≥1200px) : en dessous il n'y a pas
+   de marge libre → on les cache pour ne jamais chevaucher le contenu. */
+.deco-pill {
+  position: absolute; z-index: 3; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px; border-radius: 999px;
+  /* Pastille DISCRÈTE et pastel, SANS halo : verre dépoli très léger, dans
+     l'identité (icône lavande, texte blanc atténué) sur le fond violet. */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(9px) saturate(140%);
+  -webkit-backdrop-filter: blur(9px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-head); font-weight: 700; font-size: 0.76rem;
+  box-shadow: none;                       /* aucun halo (retour client) */
+  white-space: nowrap;
+}
+.deco-pill svg { width: 15px; height: 15px; flex: none; color: var(--np-lavender); }
+.deco-pill b { font-weight: 800; color: #fff; }
+.deco-pill span { font-weight: 600; opacity: 0.55; }
+/* Panneaux en frise = largeur DE LEUR CONTENU (pas 100vw) → aucune gouttière
+   latérale. Le seul vide fiable : la BANDE DE PADDING EN HAUT (réservée pour
+   dégager la nav, ~100px, toujours vide) et la BANDE DU BAS pour les panneaux à
+   contenu court (Carte, Footer). Décalées vers les coins (loin de la nav
+   centrale). Frise large uniquement. */
+.contact, .map-panel { position: relative; }
+/* Positions d'après les flèches du client : dans les grandes zones violettes
+   vides, à gauche / au-dessus du contenu. À caler finement (rendu frise non
+   visible côté dev). */
+.contact     > .deco-pill--a { top: 46%; left: -20%; transform: rotate(-3deg); }
+.contact     > .deco-pill--d { top: 26%; left: -22%; transform: rotate(2deg); }
+.map-panel   > .deco-pill--b { top: 42%; left: -7%;  transform: rotate(3deg); }
+.map-panel   > .deco-pill--c { top: 62%; left: -6%;  transform: rotate(-3deg); }
+.site-footer > .deco-pill--e { top: 14%; left: 42%;  transform: rotate(2deg); }
+@media (max-width: 1300px) { .deco-pill { display: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .deco-pill { animation: decoFloat 6.4s ease-in-out infinite; }
+  .contact > .deco-pill--d { animation-duration: 7.4s; animation-delay: -2s; }
+  .map-panel > .deco-pill--c { animation-duration: 7s; animation-delay: -1.4s; }
+  .site-footer > .deco-pill--e { animation-duration: 6.8s; animation-delay: -1s; }
+}
+@keyframes decoFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
 
 /* 7a. STATS + COLLABORATIONS ---------------------------------------------- */
 .stats-collab { padding: 96px 0; background: var(--np-white); }
@@ -1763,6 +1811,171 @@ section { position: relative; }
 .team-content p { color: var(--np-muted); max-width: 60ch; }
 .team-content p strong { color: var(--np-ink); }
 
+/* ===== ÉQUIPE : cards profil (refonte « cards horizontales ») ===== */
+.team-wrap { max-width: 960px; margin: 0 auto; }
+.team-lead { color: rgba(255, 255, 255, 0.72); line-height: 1.6; max-width: 60ch; margin-top: 8px; }
+
+.team-cards { display: flex; flex-direction: column; gap: 22px; margin: 34px 0; }
+.team-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 28px;
+  padding: 26px 32px 26px 26px;
+  border-radius: 24px;
+  overflow: hidden;
+  isolation: isolate;
+  /* Card ROSE/MAGENTA comme la card « L'Event » : dégradé magenta de la charte,
+     posé sur le fond violet sombre de la section → elle ressort franchement.
+     backdrop-filter conservé pour l'effet verre. */
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(158deg, #c231f2 0%, #a92cdb 100%);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.6);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+/* Deux teintes distinctes dans la famille rose (rappel discret Com' / Event) :
+   Charlène tire vers le rose magenta, Axel vers le violet. Halo coloré assorti
+   + liseré haut lumineux pour la profondeur. */
+.team-card--com {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(158deg, #cf3df0 0%, #ad2ee0 100%);
+  box-shadow: 0 26px 58px -30px rgba(0, 0, 0, 0.6), 0 20px 50px -28px rgba(207, 61, 240, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.team-card--event {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(158deg, #a13ff2 0%, #7a2cd6 100%);
+  box-shadow: 0 26px 58px -30px rgba(0, 0, 0, 0.6), 0 20px 50px -28px rgba(140, 44, 220, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.team-card:hover { transform: translateY(-5px); }
+
+/* Prénom géant en watermark (signature éditoriale, façon secteurs). Placé en
+   bas à droite, gros et estompé, légèrement rogné par le bas de la carte. */
+.team-card-ghost {
+  position: absolute; right: 24px; bottom: 0;
+  font-family: var(--font-head); font-weight: 900; white-space: nowrap;
+  font-size: clamp(2.8rem, 7vw, 4.6rem); line-height: 0.9; letter-spacing: -0.03em;
+  color: #fff; opacity: 0.04; z-index: 0; pointer-events: none;
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+.team-card:hover .team-card-ghost { opacity: 0.07; transform: translate(-6px, 4px); }
+
+/* Fine ligne d'accent en haut, tapered + glow (reprise des secteurs) */
+.team-card::after {
+  content: ""; position: absolute; top: -1px; left: 26px; right: 26px; height: 2px;
+  border-radius: 2px; z-index: 2; pointer-events: none;
+  transition: left 0.5s var(--ease), right 0.5s var(--ease);
+}
+.team-card--com::after   { background: linear-gradient(90deg, transparent, var(--np-cyan), transparent);   box-shadow: 0 0 16px rgba(53, 242, 242, 0.55); }
+.team-card--event::after { background: linear-gradient(90deg, transparent, var(--np-violet), transparent); box-shadow: 0 0 16px rgba(188, 107, 242, 0.55); }
+.team-card:hover::after { left: 14px; right: 14px; }
+
+/* Photo + contenu au-dessus du watermark */
+.team-card-photo, .team-card-body { position: relative; z-index: 1; }
+
+/* Photo ronde : disque pastel + photo détourée posée dessus + anneau dégradé */
+.team-card-photo { width: 128px; height: 128px; flex: none; }
+.team-card-photo::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: linear-gradient(160deg, #e2fbfb, #b9f0f2);
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.55);   /* profondeur sous la photo */
+}
+.team-card-photo::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; padding: 3px;
+  background: var(--grad-brand);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.team-card-photo img {
+  position: relative; z-index: 1; width: 128px; height: 128px; border-radius: 50%;
+  object-fit: contain; object-position: 50% 100%;
+  filter: contrast(1.07) saturate(1.08);
+}
+/* Petit index éditorial (01 / 02) */
+.team-card-idx {
+  display: block; font-family: var(--font-head); font-weight: 800;
+  font-size: 0.8rem; letter-spacing: 0.12em; margin-bottom: 6px;
+}
+.team-card--com   .team-card-idx { color: var(--np-cyan); }
+.team-card--event .team-card-idx { color: var(--np-pink); }
+/* Nom : dégradé blanc→couleur (comme .sector-badge) */
+.team-card-name { font-family: var(--font-head); font-weight: 800; font-size: 1.55rem; margin: 0 0 4px; }
+.team-card--com   .team-card-name,
+.team-card--event .team-card-name { background: linear-gradient(100deg, #fff 0%, #fff 60%, var(--np-rose) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* Rôle : italique (comme .sector-tagline) */
+.team-card-role { margin: 0 0 12px; font-style: italic; color: rgba(255, 255, 255, 0.82); font-size: 0.98rem; }
+.team-card-desc { color: rgba(255, 255, 255, 0.72); line-height: 1.55; font-size: 0.96rem; margin: 0; }
+.team-outro { color: rgba(255, 255, 255, 0.82); line-height: 1.6; font-size: 1.02rem; max-width: 60ch; }
+.team-outro strong { color: #fff; font-weight: 700; }
+
+/* Frise horizontale : le panneau fait 100vh → on centre et on prévoit un scroll
+   de secours (comme le contact) si l'écran est court. */
+.h-active .team .team-wrap {
+  height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  /* PAS de overflow-y:auto/overscroll:contain ici : ça piégeait la molette dans
+     la zone et bloquait la navigation de la frise. Le contenu est compacté pour
+     tenir dans le panneau (voir paliers max-height ci-dessous) → aucun scroll
+     interne nécessaire, la molette pilote toujours la frise. */
+  overflow: visible;
+  padding-top: clamp(56px, 7vh, 80px);
+  padding-bottom: clamp(18px, 3vh, 34px);
+}
+
+/* Frise : on COMPACTE tout pour que la section tienne dans le panneau 100vh
+   sans défilement (retour client : « ça ne doit pas scroller »). */
+.h-active .team .team-content h2 { font-size: clamp(1.35rem, 2.4vw, 1.9rem); margin-bottom: 6px; }
+.h-active .team .team-lead { font-size: 0.86rem; line-height: 1.45; margin-top: 4px; }
+.h-active .team .team-cards { gap: 14px; margin: 16px 0; }
+/* Cards plus GROSSES (retour client) : la largeur accrue (.team-wrap 960px) fait
+   tenir la description sur moins de lignes → cards plus imposantes MAIS plus
+   courtes → tout rentre toujours dans le panneau, sans scroll. */
+.h-active .team .team-card { padding: 20px 30px; gap: 26px; }
+.h-active .team .team-card-photo,
+.h-active .team .team-card-photo img { width: 108px; height: 108px; }
+.h-active .team .team-card-name { font-size: 1.5rem; margin-bottom: 2px; }
+.h-active .team .team-card-role { margin-bottom: 6px; font-size: 0.95rem; }
+.h-active .team .team-card-desc { font-size: 0.95rem; line-height: 1.45; }
+.h-active .team .team-card-ghost { font-size: clamp(2.6rem, 5vw, 4rem); }
+.h-active .team .team-outro { font-size: 0.9rem; margin-top: 6px; }
+
+/* Écrans moyennement hauts : on resserre d'un cran. */
+@media (min-width: 1025px) and (max-height: 860px) {
+  .h-active .team .team-content h2 { font-size: 1.55rem; }
+  .h-active .team .team-lead { font-size: 0.82rem; }
+  .h-active .team .team-cards { gap: 12px; margin: 12px 0; }
+  .h-active .team .team-card { padding: 16px 26px; gap: 22px; }
+  .h-active .team .team-card-photo,
+  .h-active .team .team-card-photo img { width: 96px; height: 96px; }
+  .h-active .team .team-card-name { font-size: 1.4rem; }
+  .h-active .team .team-card-desc { font-size: 0.9rem; }
+  .h-active .team .team-outro { font-size: 0.84rem; margin-top: 3px; }
+}
+/* Écrans courts : filet de sécurité anti-scroll — on sacrifie l'accroche et la
+   phrase de fin pour GARANTIR que tout tienne sans défilement. */
+@media (min-width: 1025px) and (max-height: 720px) {
+  .h-active .team .team-lead,
+  .h-active .team .team-outro { display: none; }
+  .h-active .team .team-card { padding: 13px 24px; gap: 20px; }
+  .h-active .team .team-card-photo,
+  .h-active .team .team-card-photo img { width: 88px; height: 88px; }
+  .h-active .team .team-card-desc { font-size: 0.86rem; }
+}
+
+/* Mobile : cards plus compactes */
+@media (max-width: 560px) {
+  .team-card { grid-template-columns: 92px 1fr; gap: 16px; padding: 18px 20px; }
+  .team-card-photo { width: 92px; height: 92px; }
+  .team-card-photo img { width: 92px; height: 92px; }
+  .team-card-name { font-size: 1.25rem; }
+}
+
 /* Colonne visuelle : teaser au-dessus de la carte + lien "Qui sommes-nous ?" */
 .team-visual { display: flex; flex-direction: column; align-items: center; }
 .team-kicker {
@@ -1934,10 +2147,15 @@ section { position: relative; }
 .form-success {
   text-align: center;
   padding: clamp(30px, 5vw, 46px) clamp(22px, 4vw, 34px);
-  background: rgba(19, 16, 32, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  /* Glassy même couleur que la section (voir cards Équipe / Horaires) */
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 60%),
+    rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 22px;
-  box-shadow: 0 26px 70px -34px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 26px 70px -34px rgba(0, 0, 0, 0.55);
   outline: none;
   animation: fs-in 0.55s var(--ease) both;
 }
@@ -1981,8 +2199,24 @@ section { position: relative; }
   line-height: 1.65;
   max-width: 34ch;
   margin: 0 auto;
+  text-align: center;                 /* jamais justifié : lignes bien centrées */
 }
 .fs-text b { color: #fff; font-weight: 600; }
+
+/* Carte centrée et bornée (sinon elle s'étirait sur toute la colonne) */
+.form-success { max-width: 460px; margin-inline: auto; }
+
+/* État « message envoyé » : on efface le titre « Contacte-nous ! » (il n'a plus
+   de sens une fois le message parti) et on centre la carte de confirmation.
+   La carte Horaires, elle, reste visible à côté. */
+.contact-inner.is-sent .contact-title { display: none; }
+.contact-inner.is-sent .contact-form-wrap {
+  display: flex; flex-direction: column; justify-content: center;
+}
+/* En frise (panneau 100vh), la carte courte est ancrée en haut par défaut :
+   on la recentre verticalement en face de Horaires, et on centre la paire. */
+.h-active .contact .contact-inner.is-sent { justify-content: center; }
+.h-active .contact .contact-inner.is-sent .contact-form-wrap { align-self: center; }
 
 @media (prefers-reduced-motion: reduce) {
   .form-success { animation: none; }
@@ -1996,9 +2230,9 @@ section { position: relative; }
   /* Fond assombri (pas juste un voile blanc à 3.5%) : le panneau se détache
      nettement du dégradé vif, texte et icônes restent lisibles. */
   background:
-    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 65%),
-    rgba(18, 8, 28, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 60%),
+    linear-gradient(158deg, #c231f2 0%, #a92cdb 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-top-color: rgba(188, 107, 242, 0.45);
   color: #fff;
   overflow: hidden;
@@ -2007,8 +2241,8 @@ section { position: relative; }
     0 0 0 0.5px rgba(188, 107, 242, 0.14),
     0 24px 70px -28px rgba(188, 107, 242, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
   transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.4s var(--ease);
 }
 .contact-info::after {
@@ -4277,17 +4511,17 @@ html.np-reveal .hero-top .hero-tag {
 /* --- 1. LE FOND : dégradé cyan → cyan clair (SANS blanc pur, pour que le
        texte blanc reste lisible partout, comme en haut de la section) ------- */
 .panel--deep::before {
-  background-color: #3BEFEF;
-  /* Transposition cyan du dégradé magenta .world-bg : chaque arrêt garde la
-     MÊME luminosité que son homologue (#c31ff5→#ca88e1), donc exactement le
-     même taux d'éclaircissement, mais en cyan. Vertical (180deg) pour rester
+  background-color: #392658;
+  /* Fond VIOLET SOMBRE de la charte (couleur des cards), avec le MÊME sens de
+     dégradé que le magenta de l'accueil : SOMBRE en haut → s'éclaircit vers le
+     bas (« tire vers le blanc » plus le regard descend). 180deg vertical =
      sans couture entre panneaux en frise. */
   background-image: linear-gradient(180deg,
-    #1FF5F5 0%,
-    #3BEFEF 22%,
-    #57ECEC 45%,
-    #74E6E6 72%,
-    #88E1E1 100%);
+    #201334 0%,
+    #2a1945 20%,
+    #392658 45%,
+    #4e3a74 72%,
+    #6f5a99 100%);
   /* Attaché au viewport : dégradé continu d'un panneau empilé à l'autre
      (mobile / tablette), pas de couture aux frontières. */
   background-attachment: fixed;
@@ -4305,7 +4539,7 @@ html.np-reveal .hero-top .hero-tag {
      un dégradé DOUX (quasi uni) → aucune couture sur tous les navigateurs. */
   .panel--deep::before {
     background-attachment: scroll;
-    background-image: linear-gradient(180deg, #35F2F2 0%, #41EFEF 100%);
+    background-image: linear-gradient(180deg, #201334 0%, #4e3a74 100%);
   }
 }
 
@@ -4330,14 +4564,19 @@ html.np-reveal .hero-top .hero-tag {
 }
 
 /* --- 3. EYEBROWS + liens accent ------------------------------------------- */
-/* Eyebrow (« NEOPURE TEAM », « ON CAPTE… ») : violet de la charte, comme avant
-   (il n'était pas cyan à l'origine, donc pas concerné par le passage au rose). */
-.panel--deep .eyebrow { color: #bf3bef; }
+/* Eyebrow (« NEOPURE TEAM », « ON CAPTE… ») : repassé en CYAN — le fond du
+   chapitre est désormais violet, le cyan y ressort (retour client). */
+.panel--deep .eyebrow { color: var(--np-cyan); }
 .panel--deep .consent a,
-.site-footer .footer-credit a,
 .site-footer .site-selfnote b {
   color: #E85EF5;
   -webkit-text-fill-color: currentColor;   /* annule le clip-text cyan d'origine */
+  background: none;
+}
+/* Crédit « @the0_hgg » : cyan (idem, ressort sur le violet) */
+.site-footer .footer-credit a {
+  color: var(--np-cyan);
+  -webkit-text-fill-color: currentColor;
   background: none;
 }
 
@@ -4389,7 +4628,7 @@ html.np-reveal .hero-top .hero-tag {
 }
 
 /* --- 8. ICÔNES SVG de la carte Horaires (tél/mail) → rose ----------------- */
-.panel--deep .ci-ico { color: #E85EF5; }
+.panel--deep .ci-ico { color: var(--np-cyan); }
 
 /* --- 9. FORMULAIRE : puce « Nature du message » sélectionnée --------------- */
 /* Le dégradé cyan→lavande d'origine se fondait dans le fond cyan. Puce
@@ -4414,11 +4653,9 @@ html.np-reveal .hero-top .hero-tag {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(180deg,
-    rgba(7, 58, 72, 0)    0%,
-    rgba(7, 58, 72, 0.45) 26%,
-    rgba(6, 50, 64, 0.62) 62%,
-    rgba(6, 46, 60, 0.66) 100%);
+  /* Surcouche teal RETIRÉE (thème violet) : le footer utilise désormais le même
+     voile violet dégradé que les autres panneaux — « plus besoin de décliner ici ». */
+  background: none;
 }
 @media (min-width: 1025px) {
   /* En frise le voile déborde de 134px à droite (soudure des panneaux) : la
