@@ -114,22 +114,31 @@
     targets.forEach(function (t) { spy.observe(t); });
   }
 
-  /* 5. Chips « Nature du message » : sélection unique avec mise à jour du champ caché */
+  /* 5. Chips « Nature du message » : sélection MULTIPLE (retour client : on ne
+     pouvait en cocher qu'une seule). Chaque puce se coche/décoche ; le champ
+     caché reçoit les libellés retenus séparés par « , » — c'est cette chaîne
+     qui part dans l'e-mail. */
   (function () {
     // La puce « +N » est exclue de la sélection : elle ne porte pas de
     // data-value et ne doit jamais devenir la réponse du formulaire.
     var chips = document.querySelectorAll(".field--chips .chip:not(.chip--more)");
     var hidden = document.getElementById("f-nature");
     if (!chips.length || !hidden) return;
+
+    function sync() {
+      var picked = [];
+      chips.forEach(function (o) {
+        if (o.classList.contains("is-active")) picked.push(o.getAttribute("data-value") || "");
+      });
+      hidden.value = picked.join(", ");
+    }
+
     chips.forEach(function (c) {
       c.addEventListener("click", function () {
-        chips.forEach(function (o) {
-          o.classList.remove("is-active");
-          o.setAttribute("aria-checked", "false");
-        });
-        c.classList.add("is-active");
-        c.setAttribute("aria-checked", "true");
-        hidden.value = c.getAttribute("data-value") || "";
+        var on = !c.classList.contains("is-active");
+        c.classList.toggle("is-active", on);
+        c.setAttribute("aria-checked", on ? "true" : "false");
+        sync();
       });
     });
   })();

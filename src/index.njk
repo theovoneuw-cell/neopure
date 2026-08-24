@@ -602,21 +602,21 @@
               <input type="tel" id="f-tel" name="telephone" autocomplete="tel" placeholder="06 ..." />
             </div>
             <div class="field field--chips">
-              <label id="f-nature-label">Nature du message</label>
-              <div class="chips" role="radiogroup" aria-labelledby="f-nature-label">
-                <button type="button" class="chip" data-value="Réseaux sociaux"        role="radio" aria-checked="false">Réseaux sociaux</button>
-                <button type="button" class="chip" data-value="Création de contenus"   role="radio" aria-checked="false">Création de contenus</button>
-                <button type="button" class="chip" data-value="Stratégie digitale"     role="radio" aria-checked="false">Stratégie digitale</button>
-                <button type="button" class="chip" data-value="Site web / Appli"       role="radio" aria-checked="false">Site web / Appli</button>
-                <button type="button" class="chip" data-value="Photo / Vidéo"          role="radio" aria-checked="false">Photo / Vidéo</button>
+              <label id="f-nature-label">Nature du message <span class="field-hint">(plusieurs choix possibles)</span></label>
+              <div class="chips" role="group" aria-labelledby="f-nature-label">
+                <button type="button" class="chip" data-value="Réseaux sociaux"        role="checkbox" aria-checked="false">Réseaux sociaux</button>
+                <button type="button" class="chip" data-value="Création de contenus"   role="checkbox" aria-checked="false">Création de contenus</button>
+                <button type="button" class="chip" data-value="Stratégie digitale"     role="checkbox" aria-checked="false">Stratégie digitale</button>
+                <button type="button" class="chip" data-value="Site web / Appli"       role="checkbox" aria-checked="false">Site web / Appli</button>
+                <button type="button" class="chip" data-value="Photo / Vidéo"          role="checkbox" aria-checked="false">Photo / Vidéo</button>
                 <!-- Les choix suivants sont repliés par défaut : le panneau
                      Contact fait 100 vh en frise, et ces quatre puces à elles
                      seules ajoutaient deux lignes au formulaire. Ils sont
                      dépliés par la puce « +4 » ci-dessous. -->
-                <button type="button" class="chip chip--extra" data-value="Événement"      role="radio" aria-checked="false">Événement</button>
-                <button type="button" class="chip chip--extra" data-value="DJ / Animation" role="radio" aria-checked="false">DJ / Animation</button>
-                <button type="button" class="chip chip--extra" data-value="Team building"  role="radio" aria-checked="false">Team building</button>
-                <button type="button" class="chip chip--extra" data-value="Autre"          role="radio" aria-checked="false">Autre</button>
+                <button type="button" class="chip chip--extra" data-value="Événement"      role="checkbox" aria-checked="false">Événement</button>
+                <button type="button" class="chip chip--extra" data-value="DJ / Animation" role="checkbox" aria-checked="false">DJ / Animation</button>
+                <button type="button" class="chip chip--extra" data-value="Team building"  role="checkbox" aria-checked="false">Team building</button>
+                <button type="button" class="chip chip--extra" data-value="Autre"          role="checkbox" aria-checked="false">Autre</button>
                 <!-- Placée en DERNIER dans le DOM : quand les puces repliées
                      sont masquées, elle se retrouve naturellement en bout de
                      deuxième ligne ; une fois dépliée, elle passe à la fin. -->
@@ -636,7 +636,6 @@
             </div>
             <p class="form-error" id="formError" role="alert" hidden></p>
             <button type="submit" class="btn btn-primary">Envoyer</button>
-            <p class="form-note">{{ site.content.contactNote | safe }}</p>
           </form>
         </div>
 

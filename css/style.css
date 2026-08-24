@@ -2028,7 +2028,7 @@ section { position: relative; }
   box-shadow: 0 0 0 3px rgba(188, 107, 242, 0.15);
 }
 .contact-form .btn { align-self: flex-start; margin-top: 4px; }
-.form-note { font-size: 0.8rem; color: var(--np-muted); margin: 4px 0 0; }
+.field-hint { font-weight: 400; font-size: 0.82em; color: var(--np-muted); }
 
 /* Honeypot anti-spam : invisible et hors flux, mais rempli par les bots */
 .hp-field {
@@ -3151,7 +3151,6 @@ section { position: relative; }
   .h-active .contact .field textarea { min-height: 56px; }
   .h-active .contact .field--chips .chips { gap: 6px; }
   .h-active .contact .chip { padding: 6px 12px; }
-  .h-active .contact .form-note { margin-top: 2px; }
 }
 
 /* Fenêtres vraiment courtes (petit laptop, fenêtre réduite) : le formulaire
@@ -3172,7 +3171,6 @@ section { position: relative; }
   .h-active .contact .field--chips .chips { gap: 5px; }
   .h-active .contact .chip { padding: 4px 10px; font-size: 0.78rem; }
   .h-active .contact .contact-form .btn { min-height: 40px; padding: 8px 20px; font-size: 0.9rem; }
-  .h-active .contact .form-note { font-size: 0.72rem; margin-top: 0; }
   .h-active .contact .contact-info { padding: 22px 20px; }
 }
 
@@ -3333,7 +3331,7 @@ body { background: transparent; color: var(--np-white); }
   background: rgba(18, 8, 28, 0.5);
   box-shadow: 0 0 0 3px rgba(53, 242, 242, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.form-note { color: rgba(255, 255, 255, 0.68); }
+.field-hint { color: rgba(255, 255, 255, 0.6); }
 /* Consentement + erreur : lisibles sur le fond sombre du formulaire */
 .consent { color: rgba(255, 255, 255, 0.82); }
 .consent a { color: var(--np-cyan); }
@@ -3496,9 +3494,8 @@ body { background: transparent; color: var(--np-white); }
   /* Chips : tap targets plus confortables */
   .chip { padding: 10px 16px; font-size: 0.88rem; }
   .field--chips .chips { gap: 8px; }
-  /* Retour client (mobile) : le formulaire va à l'essentiel — on retire la
-     note « On te répond sous 24 à 48h » et toute la carte Horaires/contacts. */
-  .form-note { display: none; }
+  /* Retour client (mobile) : le formulaire va à l'essentiel — on retire
+     toute la carte Horaires/contacts. */
   .contact-info { display: none; }
 
   /* CARTE / LOCALISATION ----------------------------------------------- */

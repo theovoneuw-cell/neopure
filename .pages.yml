@@ -109,5 +109,4 @@ content:
           - { name: mapHeading,      label: "Carte — titre (garder <span> et <br />)", type: text }
           - { name: mapText,         label: "Carte — texte", type: text }
           - { name: contactTitle,    label: "Contact — titre", type: string }
-          - { name: contactNote,     label: "Contact — note sous le formulaire", type: text }
           - { name: footerTagline,   label: "Pied de page — description (garder <br />)", type: text }
