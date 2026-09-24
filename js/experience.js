@@ -99,14 +99,23 @@
       keyboard: false,
       touchZoom: false
     });
-    // Tuiles équilibrées (CartoDB Voyager, SANS labels) — on les teinte ensuite en CSS
+    // Tuiles AUTO-HÉBERGÉES (assets/map-tiles) — on les teinte ensuite en CSS
     // pour les fondre dans l'univers violet du site.
-    // On n'ajoute PAS le calque de labels : son « Montpellier » gravé dans les
-    // tuiles tombait pile au centre et entrait en collision avec le pin et les
-    // ondes radar (d'où les décalages en pixels qu'on traînait). Le lieu est
-    // désormais nommé par notre propre étiquette .radar-label, propre et nette.
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19
+    // CartoDB exige désormais une clé API : sans elle, chaque tuile Voyager
+    // porte un filigrane « API KEY REQUIRED ». La carte étant figée (zoom 13,
+    // centrée sur Montpellier), on a rendu une fois pour toutes la grille 7×7
+    // qui l'entoure depuis OpenFreeMap (style Liberty, données © OpenStreetMap,
+    // sans clé) → plus aucune dépendance externe pour la carte.
+    // Toujours SANS labels : un « Montpellier » gravé dans les tuiles tombait
+    // pile au centre et entrait en collision avec le pin et les ondes radar.
+    // Le lieu est nommé par notre propre étiquette .radar-label.
+    // Tuiles en 512 px affichées en 256 → nettes sur écran Retina.
+    L.tileLayer("assets/map-tiles/{z}/{x}/{y}.png", {
+      minZoom: 13,
+      maxZoom: 13,
+      // Emprise exacte de la grille rendue (légèrement rentrée pour ne pas
+      // demander les tuiles voisines, absentes → 404).
+      bounds: [[43.4849, 3.7354], [43.7075, 4.0429]]
     }).addTo(map);
     // Le centre exact (Montpellier) est marqué par .radar-core en CSS, pile au milieu du cadre.
   }

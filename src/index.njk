@@ -53,15 +53,14 @@
   <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Bold.otf" crossorigin />
   <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Light.otf" crossorigin />
   <link rel="preload" as="font" type="font/otf" href="assets/brand/Gotham/Gotham-Black.otf" crossorigin />
-  <!-- Les tuiles de la carte viennent de CartoDB : on ouvre la connexion tôt.
-       (La lib Leaflet est désormais auto-hébergée → plus de dépendance unpkg.) -->
-  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" />
+  <!-- Carte : lib Leaflet ET tuiles auto-hébergées (assets/vendor/leaflet,
+       assets/map-tiles) → plus aucune connexion externe à ouvrir. -->
 
   <!-- ============ Carte (Leaflet, auto-hébergé) ============ -->
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
 
   <!-- ============ Styles ============ -->
-  <link rel="stylesheet" href="css/style.css?v=20260824a" />
+  <link rel="stylesheet" href="css/style.css?v=20260924a" />
 
   <!-- ============ Données structurées (SEO) ============ -->
   <script type="application/ld+json">
@@ -926,13 +925,13 @@
   </div>
 
   <!-- Leaflet (carte) — auto-hébergé (assets/vendor/leaflet), plus de CDN unpkg.
-       Seules les tuiles restent externes (CartoDB) ; si elles échouent, le radar
-       CSS reste affiché et le script sort proprement (garde `typeof L`). -->
+       Tuiles auto-hébergées elles aussi (assets/map-tiles) ; si Leaflet échoue, le
+       radar CSS reste affiché et le script sort proprement (garde `typeof L`). -->
   <script src="assets/vendor/leaflet/leaflet.js" defer></script>
 
   <script src="js/main.js?v=20260824a" defer></script>
   <script src="js/horizontal.js?v=20260712a" defer></script>
-  <script src="js/experience.js?v=20260712a" defer></script>
+  <script src="js/experience.js?v=20260924a" defer></script>
 
   <!-- Statistiques de visite : GoatCounter (gratuit, sans cookies ni bandeau,
        respecte Do Not Track). Tableau de bord : https://neopure.goatcounter.com -->

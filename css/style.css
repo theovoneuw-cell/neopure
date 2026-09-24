@@ -2646,7 +2646,7 @@ section { position: relative; }
   mix-blend-mode: color;
 }
 /* Deuxième voile : assombrit franchement la carte (multiply) — les tuiles
-   CartoDB sont beige clair et, teintées seulement en hue, rendaient un panneau
+   de la carte sont beige clair et, teintées seulement en hue, rendaient un panneau
    blanc délavé qui jurait sur le site sombre et rendait le radar invisible. */
 .map-radar::after {
   content: "";
@@ -2670,6 +2670,12 @@ section { position: relative; }
   filter: saturate(0.9) brightness(1) contrast(1.06);
 }
 .leaflet-container { font-family: var(--font-body); background: #2a1e60; }
+/* Tuiles agrandies d'1 px : sur écran 2x/3x, Leaflet place les tuiles à des
+   positions sous-pixel et laisse de fines lignes aux jointures. Le léger
+   chevauchement les masque (écart d'échelle de 1/256, invisible). Le
+   mix-blend-mode plus-lighter de leaflet.css doit sauter, sinon la bande
+   de chevauchement s'additionne et ressort en ligne claire. */
+#map .leaflet-tile { width: 257px !important; height: 257px !important; mix-blend-mode: normal; }
 
 /* Cœur (notre position) */
 .radar-core {
