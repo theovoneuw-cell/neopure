@@ -91,13 +91,13 @@
     {
       "name": "Charlène",
       "role": "Le cerveau &amp; le moteur",
-      "photo": "assets/team/charlene-v3.png",
+      "photo": "assets/team/charlene-v3.webp",
       "desc": "Stratège née, toujours en quête de l'idée juste, pour mettre en avant vos valeurs et vos projets."
     },
     {
       "name": "Axel",
       "role": "Le créatif touche-à-tout",
-      "photo": "assets/team/axel-v3.png",
+      "photo": "assets/team/axel-v3.webp",
       "desc": "Artiste de musique, fan de visuel et de graphisme, il a l'œil qui transforme vos idées en contenus qui claquent."
     }
   ],

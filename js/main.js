@@ -626,4 +626,27 @@
       if (e.key === "Escape" && modal.classList.contains("is-open")) close();
     });
   })();
+
+  /* Vidéos de la galerie : chargées et lues seulement quand elles sont à
+     l'écran (avant : 19 Mo téléchargés d'office au chargement du site). */
+  (function () {
+    var vids = document.querySelectorAll("video[data-lazy-play]");
+    if (!vids.length) return;
+    if (!("IntersectionObserver" in window)) {
+      vids.forEach(function (v) { v.autoplay = true; v.preload = "metadata"; });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        } else if (!v.paused) {
+          v.pause();
+        }
+      });
+    }, { rootMargin: "200px", threshold: 0.15 });
+    vids.forEach(function (v) { io.observe(v); });
+  })();
 })();

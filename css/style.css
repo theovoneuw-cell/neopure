@@ -5,84 +5,84 @@
 /* 0. WEBFONTS — Gotham auto-hébergées depuis assets/brand/Gotham/ ========== */
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Thin.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Thin.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Thin.otf') format('opentype');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-XLight.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-XLight.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-XLight.otf') format('opentype');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Light.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Light.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Book.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Book.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Book.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Medium.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Medium.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Bold.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Bold.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Black.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Black.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Black.otf') format('opentype');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-Ultra.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-Ultra.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-Ultra.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-BookItalic.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-BookItalic.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-BookItalic.otf') format('opentype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-MediumItalic.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-MediumItalic.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-MediumItalic.otf') format('opentype');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-BoldItalic.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-BoldItalic.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-BoldItalic.otf') format('opentype');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('../assets/brand/Gotham/Gotham-BlackItalic.otf') format('opentype');
+  src: url('../assets/brand/Gotham/Gotham-BlackItalic.woff2') format('woff2'), url('../assets/brand/Gotham/Gotham-BlackItalic.otf') format('opentype');
   font-weight: 800;
   font-style: italic;
   font-display: swap;
@@ -1252,7 +1252,7 @@ section { position: relative; }
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.88);
 }
 .gallery-swipe i {
   font-style: normal;
@@ -1630,14 +1630,21 @@ section { position: relative; }
 }
 .sector-list li:last-child { border-bottom: none; }
 /* Chaque service est cliquable → ouvre une bulle d'explication */
-.sector-list li[data-svc] { cursor: pointer; }
-.sector-list li[data-svc]:focus-visible {
+.sector-list li:has(.svc-btn) { cursor: pointer; }
+.sector-list .svc-btn {
+  all: unset;
+  cursor: pointer;
+  text-align: left;
+}
+/* Toute la ligne est cliquable (le « + » compris) */
+.sector-list .svc-btn::after { content: ""; position: absolute; inset: 0; }
+.sector-list li:has(.svc-btn:focus-visible) {
   outline: none;
   padding-left: 6px;
   color: #fff;
 }
-.sector--com   .sector-list li[data-svc]:focus-visible { box-shadow: inset 3px 0 0 var(--np-cyan); }
-.sector--event .sector-list li[data-svc]:focus-visible { box-shadow: inset 3px 0 0 var(--np-violet); }
+.sector--com   .sector-list li:has(.svc-btn:focus-visible) { box-shadow: inset 3px 0 0 var(--np-cyan); }
+.sector--event .sector-list li:has(.svc-btn:focus-visible) { box-shadow: inset 3px 0 0 var(--np-violet); }
 /* Petit « + » indiquant qu'on peut cliquer, remplacé par une flèche au survol */
 .sector-list li::after {
   content: "+";
@@ -4846,3 +4853,61 @@ html.np-reveal .hero-top .hero-tag {
   .h-active .contact .contact-inner { justify-content: center; }
 }
 /* >>> FIN EXPÉRIENCE 2e CHAPITRE NÉGATIF CYAN <<< */
+
+/* ===== Vague 1 : H1 texte + barre de contact mobile ===== */
+.hero-h1-text {
+  display: block;
+  margin-top: 18px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+.m-cta { display: none; }
+@media (max-width: 1024px) {
+  .hero-h1-text { text-align: center; margin-top: 14px; }
+  .m-cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 8px;
+    position: fixed;
+    left: 12px; right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 900;
+    padding: 8px;
+    border-radius: 18px;
+    background: rgba(30, 14, 40, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+  .m-cta a {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 46px;
+    border-radius: 12px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .m-cta .m-cta-main { background: linear-gradient(95deg, #c92fbf 0%, #9d1ff0 52%, #6a1fe0 100%); }
+  .hero-actions .hero-link { order: 2; }
+  .hero-actions .hero-socials { order: 3; flex-basis: 100%; justify-content: center; }
+  .hero-actions .hero-socials::before { display: none; }
+  .site-footer { padding-bottom: 96px; }
+}
+/* Vague 1 : « Fais défiler » lisible (contraste AA) sur le violet clair */
+.gallery-swipe {
+  color: #fff;
+  background: rgba(47, 23, 59, 0.6);
+  padding: 6px 14px;
+  border-radius: 999px;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}

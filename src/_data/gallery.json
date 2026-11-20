@@ -1,5 +1,5 @@
 [
-  { "type": "video", "variant": "vid", "delay": null, "src": "assets/gallery/reel-01.mp4?v=4", "poster": "assets/gallery/reel-01-poster.jpg?v=2" },
+  { "type": "video", "variant": "vid", "delay": null, "src": "assets/gallery/reel-01.mp4?v=5", "poster": "assets/gallery/reel-01-poster.jpg?v=2" },
   { "type": "video", "variant": "vid", "delay": 1, "src": "assets/gallery/vid-02.mp4?v=4", "poster": "assets/gallery/g04.jpg?v=2" },
   { "type": "image", "variant": "", "delay": 1, "src": "assets/gallery/g01.jpg?v=2", "alt": "Réalisation Neopure — grillade au feu de bois" },
   { "type": "image", "variant": "wide", "delay": 2, "src": "assets/gallery/g03.jpg", "alt": "Réalisation Neopure — lifestyle" },
