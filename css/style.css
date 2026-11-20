@@ -4911,3 +4911,49 @@ html.np-reveal .hero-top .hero-tag {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ===== Titre galerie « Pas juste joli. Efficace. » ===== */
+.gallery-eyebrow {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin: 0 0 18px;
+  font-family: var(--font-head);
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: #fff;
+}
+.gallery-eyebrow .hero-tag-bar { display: inline-block; width: 32px; height: 1.5px; background: var(--np-cyan); }
+.gallery-heading .gh-soft {
+  display: block;
+  font-weight: 300;
+  font-size: 0.62em;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.82);
+  margin-bottom: 0.1em;
+}
+.gallery-heading .gh-big {
+  position: relative;
+  display: inline-block;
+  font-weight: 900;
+  font-size: 1.9em;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  padding-bottom: 0.18em;
+}
+/* Trait de marque sous « Efficace. » */
+.gallery-heading .gh-big::after {
+  content: "";
+  position: absolute;
+  left: 0.04em; bottom: 0;
+  width: 62%; height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--np-cyan), var(--np-violet));
+}
+.gallery-section .gallery-accroche { margin-top: -20px; }
+@media (min-width: 1025px) {
+  .h-active .gallery-section .gallery-eyebrow { justify-content: flex-start; align-self: flex-start; margin-bottom: 10px; }
+  .h-active .gallery-section .gallery-heading { font-size: clamp(1.4rem, 2.3vw, 2rem); }
+  .h-active .gallery-section .gallery-accroche { margin-top: 10px; }
+}
+@media (max-width: 1024px) {
+  .gallery-heading .gh-big::after { left: 19%; }
+}
